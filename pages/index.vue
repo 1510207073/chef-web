@@ -323,6 +323,19 @@
     // 打字效果将在GSAP动画完成后初始化
     // 不再直接在这里调用initTypeEffect
     
+    // 添加favicon，确保在各种环境下都能正确显示
+    const faviconLink = document.createElement('link');
+    faviconLink.rel = 'shortcut icon';
+    faviconLink.type = 'image/x-icon';
+    faviconLink.href = '/favicon.ico';
+    document.head.appendChild(faviconLink);
+    
+    // 添加更多尺寸的favicon和苹果设备图标
+    const appleTouchIcon = document.createElement('link');
+    appleTouchIcon.rel = 'apple-touch-icon';
+    appleTouchIcon.href = '/images/logo.png';
+    document.head.appendChild(appleTouchIcon);
+  
     // 加载本地字体
     const fontStyle = document.createElement('style');
     // 字体文件使用绝对路径
