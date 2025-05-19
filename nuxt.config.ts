@@ -23,21 +23,20 @@ export default defineNuxtConfig({
     baseURL: '/', // 使用根路径，适合自定义域名
     buildAssetsDir: '/static/',
     head: {
-      title: '一键大厨 - 智能烹饪助手',
+      title: '一键大厨 - 轻松烹饪美食',
       htmlAttrs: {
         lang: 'zh-CN'
       },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { key: 'description', name: 'description', content: 'WiseFett is an AI-powered tool to enhance investment decisions using technical analysis and artificial intelligence.' },
+        { key: 'description', name: 'description', content: '一键大厨是一款智能烹饪辅助软件，帮助用户隔空手势操作，边做边学，轻松烹饪美食。' },
         { name: 'format-detection', content: 'telephone=no' }
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/images/favicon.svg' }, // 移除 wisefett-web 前缀
+        { rel: 'icon', type: 'image/png', href: '/images/logo.png' },
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap' },
-        { rel: 'icon', type: 'image/x-icon', href: '/images/favicon.ico' }
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap' }
       ]
     }
   },

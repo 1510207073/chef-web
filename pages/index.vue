@@ -4,30 +4,23 @@
         <div class="container">
           <div class="logo-section">
             <a href="#" class="logo-link">
-              <div class="logo-text-container">
-                <h1 class="logo-text">一键<span class="logo-text-highlight">大厨</span></h1>
+              <div class="logo-container">
+                <img src="/images/logo.png" alt="一键大厨Logo" class="nav-logo" />
+                <div class="logo-text-container">
+                  <h1 class="logo-text">一键<span class="logo-text-highlight">大厨</span></h1>
+                </div>
               </div>
             </a>
           </div>
           <nav class="navigation">
             <ul>
               <li><a href="#hero" @click.prevent="navigateToSlide(0)">首页</a></li>
-              <li><a href="#value" @click.prevent="navigateToSlide(1)">简介</a></li>
-              <li><a href="#download" @click.prevent="navigateToSlide(2)">下载</a></li>
             </ul>
           </nav>
         </div>
       </header>
   
-      <!-- 自定义指示器 -->
-      <div class="custom-indicators">
-        <div 
-          v-for="(section, index) in sections" 
-          :key="section"
-          :class="['indicator-dot', { active: activeIndex === index }]"
-          @click="navigateToSlide(index)"
-        ></div>
-      </div>
+
   
       <Swiper
         :modules="[Mousewheel, Pagination, Autoplay]"
@@ -49,169 +42,14 @@
           <section id="hero" class="section hero-section" data-section="hero">
             <div class="container">
               <div class="hero-content animate-fade-in">
-                <h2 class="hero-title">一键大厨 - 智能烹饪助手</h2>
+                <h2 class="hero-title">一键大厨 - 轻松烹饪美食</h2>
                 <p class="hero-description">隔空手势操作，边做边学，轻松烹饪美食</p>
                 <div class="cta-buttons">
-                  <a href="#download" @click.prevent="navigateToSlide(2)" class="btn primary-noshadow">立即下载</a>
+                  <a href="#" class="btn primary-noshadow">立即下载</a>
                 </div>
               </div>
             </div>
             <div class="hero-bg"></div>
-            <!-- 添加金融相关动画背景 -->
-            <div class="finance-bg-animation">
-              <div class="stock-graph"></div>
-              <div class="stock-dots"></div>
-              <div class="stock-line line1"></div>
-              <div class="stock-line line2"></div>
-              <div class="stock-line line3"></div>
-              <div class="stock-candle candle1"></div>
-              <div class="stock-candle candle2"></div>
-              <div class="stock-candle candle3"></div>
-              <div class="stock-candle candle4"></div>
-            </div>
-          </section>
-        </SwiperSlide>
-  
-        <SwiperSlide>
-          <section id="value" class="section value-section" data-section="value">
-            <div class="section-bg-decoration"></div>
-            <!-- 添加金融相关动画背景 -->
-            <div class="finance-bg-animation alt">
-              <div class="data-circle circle1"></div>
-              <div class="data-circle circle2"></div>
-              <div class="data-circle circle3"></div>
-              <div class="data-flow flow1"></div>
-              <div class="data-flow flow2"></div>
-              <div class="data-flow flow3"></div>
-              <div class="data-grid"></div>
-            </div>
-            <div class="container">
-              <h2 class="section-title text-center mb-4">产品特点</h2>
-              <p class="section-subtitle text-center mb-5">为投资决策提供全方位的技术支持与智能辅助</p>
-              <div class="value-wrapper">
-                <div class="value-item">
-                  <div class="value-icon-container">
-                    <svg class="value-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="30" cy="30" r="30" fill="rgba(234, 62, 64, 0.08)"/>
-                      <!-- Sliders for Customization -->
-                      <rect x="18" y="22" width="4" height="16" rx="2" stroke="#EA3E40" stroke-width="2"/>
-                      <rect x="28" y="22" width="4" height="16" rx="2" stroke="#EA3E40" stroke-width="2"/>
-                      <rect x="38" y="22" width="4" height="16" rx="2" stroke="#EA3E40" stroke-width="2"/>
-                      <circle cx="20" cy="26" r="3" fill="#EA3E40"/>
-                      <circle cx="30" cy="32" r="3" fill="#EA3E40"/>
-                      <circle cx="40" cy="24" r="3" fill="#EA3E40"/>
-                    </svg>
-                  </div>
-                  <h3>灵活定制</h3>
-                  <p>自由组合多种K线以及技术指标，定制属于自己的分析策略</p>
-                </div>
-                <div class="value-item">
-                  <div class="value-icon-container">
-                    <svg class="value-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="30" cy="30" r="30" fill="rgba(234, 62, 64, 0.08)"/>
-                      <!-- Brain for AI Analysis -->
-                      <path d="M30 18C25 18 21 22 21 27C21 30 23 32.5 26 34M30 18C35 18 39 22 39 27C39 30 37 32.5 34 34M26 34C24 35.5 23 38 23 40C23 41.1046 23.8954 42 25 42H35C36.1046 42 37 41.1046 37 40C37 38 36 35.5 34 34M26 34C28 35 29 36 30 36C31 36 32 35 34 34" stroke="#EA3E40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M30 36V42" stroke="#EA3E40" stroke-width="2" stroke-linecap="round"/>
-                      <!-- Optional: Connection lines/dots -->
-                      <circle cx="20" cy="25" r="1.5" fill="#EA3E40"/>
-                      <circle cx="40" cy="25" r="1.5" fill="#EA3E40"/>
-                      <circle cx="25" cy="18" r="1.5" fill="#EA3E40"/>
-                      <circle cx="35" cy="18" r="1.5" fill="#EA3E40"/>
-                      <line x1="21" y1="25" x2="24" y2="27" stroke="#EA3E40" stroke-width="1"/>
-                      <line x1="39" y1="25" x2="36" y2="27" stroke="#EA3E40" stroke-width="1"/>
-                    </svg>
-                  </div>
-                  <h3>智能分析</h3>
-                  <p>结合AI技术，提供深度市场洞察</p>
-                </div>
-                <div class="value-item">
-                  <div class="value-icon-container">
-                    <svg class="value-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="30" cy="30" r="30" fill="rgba(234, 62, 64, 0.08)"/>
-                      <!-- Eye for Intuitive UI -->
-                      <path d="M15 30C15 30 20 22 30 22C40 22 45 30 45 30C45 30 40 38 30 38C20 38 15 30 15 30Z" stroke="#EA3E40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      <circle cx="30" cy="30" r="5" stroke="#EA3E40" stroke-width="2"/>
-                    </svg>
-                  </div>
-                  <h3>简洁直观</h3>
-                  <p>友好的用户界面，降低学习门槛</p>
-                </div>
-                <div class="value-item">
-                  <div class="value-icon-container">
-                    <svg class="value-icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="30" cy="30" r="30" fill="rgba(234, 62, 64, 0.08)"/>
-                      <!-- Simple Monitor -->
-                      <rect x="15" y="18" width="30" height="20" rx="2" stroke="#EA3E40" stroke-width="2"/>
-                      <!-- Stand -->
-                      <rect x="25" y="38" width="10" height="4" rx="1" stroke="#EA3E40" stroke-width="2"/>
-                      <!-- Simple "running" indicator inside monitor -->
-                      <circle cx="30" cy="28" r="3" stroke="#EA3E40" stroke-width="2"/>
-                      <!-- Optional: Add a line connecting stand to monitor -->
-                      <line x1="30" y1="38" x2="30" y2="42" stroke="#EA3E40" stroke-width="2"/>
-                    </svg>
-                  </div>
-                  <h3>本地运行</h3>
-                  <p>数据安全，无需担心隐私泄露</p>
-                </div>
-              </div>
-            </div>
-          </section>
-        </SwiperSlide>
-  
-        <SwiperSlide>
-          <section id="download" class="section download-section" data-section="download">
-            <div class="download-bg-decoration"></div>
-            <!-- 添加金融相关动画背景 -->
-            <div class="finance-bg-animation third">
-              <div class="market-pulse pulse1"></div>
-              <div class="market-pulse pulse2"></div>
-              <div class="market-pulse pulse3"></div>
-              <div class="market-chart"></div>
-              <div class="market-symbols">
-                <span>+</span>
-                <span>%</span>
-                <span>$</span>
-                <span>€</span>
-                <span>¥</span>
-              </div>
-            </div>
-            <div class="container">
-              <h2 class="section-title text-center mb-4">立即下载</h2>
-              <p class="section-subtitle text-center mb-5">选择适合您系统的版本开始使用 WiseFett</p>
-              
-              <div class="download-options">
-                <div class="download-card card">
-                  <div class="download-icon windows-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M0 3.449L9.75 2.1V11.551H0V3.449ZM10.949 1.949L24 0V11.4H10.949V1.949ZM0 12.6H9.75V22.051L0 20.699V12.6ZM10.949 12.6H24V24L11.1 22.199" fill="#EA3E40"/>
-                    </svg>
-                  </div>
-                  <h3 class="mb-3">Windows</h3>
-                  <p class="mb-2">Windows 10 64位及以上</p>
-                  <a :href="windowsDownloadUrl" @click="trackDownload('Windows', 'x64')" class="btn secondary">下载 Windows 版本</a>
-                </div>
-                <div class="download-card card">
-                  <div class="download-icon macos-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M17.0266 12.5C16.9275 9.45845 19.4961 8.05894 19.612 7.99172C18.2134 5.97643 16.0097 5.66095 15.2524 5.63386C13.4261 5.45044 11.6544 6.75399 10.7271 6.75399C9.77913 6.75399 8.34513 5.65269 6.79725 5.68661C4.8089 5.72054 2.96253 6.83068 1.97709 8.55226C-0.0490796 12.0669 1.46173 17.2476 3.388 20.2322C4.35251 21.6996 5.48811 23.345 6.97726 23.2772C8.42904 23.2053 8.98731 22.3393 10.7406 22.3393C12.471 22.3393 13.0023 23.2772 14.5233 23.2323C16.0851 23.2053 17.065 21.7379 17.9889 20.2547C19.0919 18.5602 19.54 16.896 19.5671 16.8281C19.5265 16.8151 17.1301 15.5658 17.0266 12.5Z" fill="#EA3E40"/>
-                      <path d="M14.3656 3.79066C15.1499 2.82854 15.6757 1.49638 15.5316 0.144531C14.3859 0.190376 12.9747 0.928557 12.1565 1.86482C11.4261 2.69384 10.7867 4.0709 10.9579 5.37497C12.2486 5.46927 13.5544 4.7365 14.3656 3.79066Z" fill="#EA3E40"/>
-                    </svg>
-                  </div>
-                  <h3 class="mb-3">macOS</h3>
-                  <p class="mb-2">macOS 10.15及以上</p>
-                  <a :href="macDownloadUrl" @click="trackDownload('macOS', detectedArch)" class="btn secondary">
-                    下载 macOS 版本
-                    <span v-if="detectedArch" class="detected-arch">
-                      ({{ archDisplay }})
-                    </span>
-                  </a>
-                </div>
-              </div>
-              
-              <div class="download-info text-center">
-                <p>通过下载，您同意我们的<a href="/terms" target="_blank" rel="noopener noreferrer" class="text-link">使用条款</a>和<a href="/privacy" target="_blank" rel="noopener noreferrer" class="text-link">隐私政策</a></p>
-              </div>
-            </div>
           </section>
         </SwiperSlide>
       </Swiper>
@@ -219,7 +57,13 @@
       <footer class="footer">
         <div class="container">
           <div class="footer-content">
-            <p class="copyright">Copyright © 2025 BitRhythm.</p>
+            <div class="footer-links">
+              <span class="copyright">Copyright © 2025 BitRhythm</span>
+              <span class="footer-separator">|</span>
+              <a href="/terms" target="_blank" rel="noopener noreferrer" class="footer-link">使用条款</a>
+              <span class="footer-separator">|</span>
+              <a href="/privacy" target="_blank" rel="noopener noreferrer" class="footer-link">隐私政策</a>
+            </div>
           </div>
         </div>
       </footer>
@@ -236,7 +80,7 @@
   
   const swiperInstance = ref(null);
   const activeIndex = ref(0);
-  const sections = ['hero', 'value', 'download'];
+  const sections = ['hero'];
   const config = useRuntimeConfig();
   const appVersion = config.public.appVersion;
   const detectedArch = ref(null);
@@ -246,17 +90,17 @@
   const macDownloadUrl = computed(() => {
     const version = appVersion;
     const arch = detectedArch.value === 'arm64' ? 'arm64' : 'x64';
-    const filename = `WiseFett_${version}_${arch}.zip`;
-    const baseUrl = `https://wyld-media.oss-cn-beijing.aliyuncs.com/wisefett/update/v${version}/mac/${filename}`;
+    const filename = `OneKeyChef_${version}_${arch}.zip`;
+    const baseUrl = `https://wyld-media.oss-cn-beijing.aliyuncs.com/onekeychef/update/v${version}/mac/${filename}`;
     return baseUrl;
   });
 
   const windowsDownloadUrl = computed(() => {
     const version = appVersion;
     // Link to the .zip file as requested
-    const filename = `WiseFett_${version}.zip`; 
+    const filename = `OneKeyChef_${version}.zip`; 
     // Construct the path similar to macOS, using the versioned subdirectory
-    const baseUrl = `https://wyld-media.oss-cn-beijing.aliyuncs.com/wisefett/update/v${version}/win/${filename}`;
+    const baseUrl = `https://wyld-media.oss-cn-beijing.aliyuncs.com/onekeychef/update/v${version}/win/${filename}`;
     return baseUrl;
   });
 
@@ -379,7 +223,7 @@
   /* Swiper 相关样式 */
   .main-swiper {
     width: 100%;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 160px);
     margin-top: 80px;
   }
   
@@ -674,6 +518,22 @@
     text-decoration: none;
   }
   
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .nav-logo {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    padding: 3px;
+    background-color: #fff;
+  }
+  
   .logo-text-container {
     position: relative;
     display: inline-block;
@@ -683,8 +543,8 @@
     /* font-family: 'Montserrat', sans-serif; */
     /* Increase font-weight for boldness */
     font-weight: 700;
-    font-size: 32px;
-    letter-spacing: 1.5px;
+    font-size: 28px;
+    letter-spacing: 1px;
     color: var(--dark-text);
     margin: 0;
     position: relative;
@@ -705,21 +565,7 @@
     text-shadow: 0 0 10px rgba(234, 62, 64, 0.5);
   }
   
-  .logo-text::before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
-    transform: scaleX(0.8);
-    transition: transform 0.3s ease;
-  }
-  
-  .logo-link:hover .logo-text::before {
-    transform: scaleX(1);
-  }
+  /* 删除下滑线效果 */
   
   .logo-badge {
     position: absolute;
@@ -1222,8 +1068,6 @@
     background-color: var(--primary-color);
     color: rgba(0, 0, 0, 0.7);
     padding: 20px 0;
-    position: fixed;
-    bottom: 0;
     width: 100%;
     z-index: 90;
   }
@@ -1232,11 +1076,36 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
   }
   
   .copyright {
     margin: 0;
     font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .footer-links {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .footer-link {
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-link:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+  }
+  
+  .footer-separator {
+    margin: 0 10px;
+    color: rgba(0, 0, 0, 0.4);
   }
   
   /* 响应式设计 */
@@ -1286,6 +1155,11 @@
       flex-direction: column;
       text-align: center;
       gap: 15px;
+      justify-content: center;
+    }
+    
+    .footer-links {
+      gap: 10px;
     }
     
     .value-icon {

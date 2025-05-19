@@ -1,13 +1,13 @@
 /* 全局CSS变量 */
 :root {
-  --primary-color: #000000;     /* 黑色 */
-  --secondary-color: #2B5DE0;   /* 蓝色主题色 */
-  --accent-color: #2B5DE0;      /* 与secondary相同，保持统一 */
+  --primary-color: #ffffff;     /* 白色 */
+  --secondary-color: #EA3E40;   /* 红色主题色 */
+  --accent-color: #EA3E40;      /* 与secondary相同，保持统一 */
   --success-color: #2ecc71;     /* 绿色，正面指标 */
   --danger-color: #e74c3c;      /* 红色，负面指标 */
   --text-color: #333333;        /* 深灰色文本 */
   --light-text: #f8f9fa;        /* 浅色文本 */
-  --background-color: #f8f9fa;  /* 浅灰色背景 */
+  --background-color: #ffffff;  /* 白色背景 */
   --card-bg: #ffffff;           /* 卡片背景 */
   --border-color: #e6e9f0;      /* 边框颜色 */
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);  /* 阴影效果 */
