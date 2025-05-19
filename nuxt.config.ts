@@ -12,31 +12,27 @@ console.log('[Nuxt Config] Build time app version from ENV:', appVersion);
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   dir: {
     pages: 'pages',
   },
   ssr: false, // Github pages require
   app: {
-    // 如果使用自定义域名 wisefett.wyld.cc 则不需要基础路径
-    // 如果使用 GitHub Pages 则需要基础路径 /wisefett-web/
-    baseURL: '/', // 使用根路径，适合自定义域名
-    buildAssetsDir: '/static/',
+    // 不使用子路径，应为我们用自定义域名
+    baseURL: '/',
+    // 使用标准资源目录
+    buildAssetsDir: '_nuxt',
     head: {
       title: '一键大厨 - 轻松学做美食',
-      htmlAttrs: {
-        lang: 'zh-CN'
-      },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { key: 'description', name: 'description', content: '一键大厨是一款智能烹饪辅助软件，帮助用户隔空手势操作，边做边学，轻松烹饪美食。' },
-        { name: 'format-detection', content: 'telephone=no' }
+        { hid: 'description', name: 'description', content: '一键大厨是一个让你轻松学做美食的应用，通过隔空手势操作，边学边做，轻松成为大厨。' },
+        { name: 'theme-color', content: '#ffffff' },
       ],
       link: [
-        { rel: 'icon', type: 'image/png', href: '/images/logo.png' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap' }
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'apple-touch-icon', href: '/favicon.ico' },
       ]
     }
   },
@@ -56,11 +52,9 @@ export default defineNuxtConfig({
   //   // https://content.nuxt.com/docs/features/markdown-content#markdown-options
   // },
   runtimeConfig: {
-    // Nuxt will automatically populate public.appVersion 
-    // from the NUXT_PUBLIC_APP_VERSION environment variable (loaded from .env)
+    // Keys within public are also exposed client-side
     public: {
-      // Manually assign the value to runtime config
-      appVersion: appVersion
+      appVersion: process.env.BUILD_TIME_APP_VERSION || '1.4.0',
     }
   }
 })

@@ -1,5 +1,12 @@
 <template>
     <div class="app-container">
+      <!-- 添加页面预加载遮罩，在GSAP动画开始前隐藏内容 -->
+      <div class="page-loader">
+        <div class="loader-content">
+          <div class="loader-spinner"></div>
+        </div>
+      </div>
+      
       <header class="header">
         <div class="container">
           <div class="logo-section">
@@ -57,7 +64,7 @@
                   <a href="#" class="app-store-btn">
                     <div class="store-btn">
                       <img src="/images/appstore.svg" alt="App Store" />
-                      <span>App Store 下载</span>
+                      <span>iOS 下载</span>
                     </div>
                   </a>
                   <a href="#" class="android-btn">
@@ -173,12 +180,25 @@
   
   function initTypeEffect() {
     if (typeText.value) {
-      runTypeEffect();
+          // 不再需要处理光标显示
+    // if (typeText.value) {
+    //   typeText.value.classList.remove('typing-active');
+    // }
       
-      // 每3秒重新执行一次
-      typeTimer = setInterval(() => {
+      // 延迟一小段时间再开始打字效果
+      setTimeout(() => {
         runTypeEffect();
-      }, 10000);
+        
+        // 每10秒重新执行一次
+        typeTimer = setInterval(() => {
+          // 不再需要处理光标显示
+          // if (typeText.value) {
+          //   typeText.value.classList.remove('typing-active');
+          // }
+          
+          runTypeEffect();
+        }, 10000);
+      }, 500); // 增加延迟，确保GSAP动画充分完成
     }
   }
   
@@ -187,8 +207,10 @@
     
     const textElement = typeText.value;
     textElement.textContent = '';
+    textElement.style.visibility = 'visible'; // 确保描述区域可见
     
-    // 先用透明文本占位，保证高度
+    // 先用透明文本占位，保证高度，但不显示光标
+    textElement.classList.remove('typing-active');
     textElement.innerHTML = `<span style="visibility:hidden;">${textToType}</span>`;
     
     let charIndex = 0;
@@ -198,16 +220,22 @@
       clearInterval(window.typingInterval);
     }
     
-    // 逐个字符打印
-    window.typingInterval = setInterval(() => {
-      if (charIndex < textToType.length) {
-        // 替换占位文本
-        textElement.innerHTML = `${textToType.substring(0, charIndex + 1)}`;
-        charIndex++;
-      } else {
-        clearInterval(window.typingInterval);
-      }
-    }, 100); // 调整打字速度
+          // 开始打字前添加短暂延迟
+      setTimeout(() => {
+        // 不再添加显示光标的类
+        // textElement.classList.add('typing-active');
+      
+      // 逐个字符打印
+      window.typingInterval = setInterval(() => {
+        if (charIndex < textToType.length) {
+          // 替换占位文本
+          textElement.innerHTML = `${textToType.substring(0, charIndex + 1)}`;
+          charIndex++;
+        } else {
+          clearInterval(window.typingInterval);
+        }
+      }, 100); // 调整打字速度
+    }, 200);
   }
   
   const onSwiper = (swiper) => {
@@ -229,12 +257,18 @@
         defaults: { 
           ease: "power2.out", 
           duration: 1
+        },
+        onComplete: () => {
+          // GSAP动画完成后执行打字效果
+          console.log("GSAP动画完成，开始执行打字效果");
+          initTypeEffect();
         }
       });
 
-      // 设置元素初始状态，避免加载时闪烁
+      // 元素初始状态已在CSS中设置，这里保持一致
+      // 这些设置与CSS预设相同，确保在不同浏览器中一致性
       gsap.set('.gsap-title', { opacity: 0, y: -50, scale: 0.9 });
-      gsap.set('.gsap-desc', { opacity: 0, x: -30 });
+      gsap.set('.gsap-desc', { opacity: 0, x: -30, visibility: 'hidden' });
       gsap.set('.gsap-buttons', { opacity: 0, y: 30 });
 
       // 添加动画序列
@@ -247,17 +281,38 @@
       .to('.gsap-desc', { 
         opacity: 1, 
         x: 0,
+        visibility: 'visible',
         duration: 1
       }, "-=0.7") // 描述在标题动画70%时开始
       .to('.gsap-buttons', { 
         opacity: 1, 
         y: 0,
         duration: 0.8
-      }, "-=0.5"); // 按钮在描述动画50%时开始
+      }, "-=0.5") // 按钮在描述动画50%时开始
+      .call(() => {
+        // 动画完成后隐藏加载遮罩
+        const pageLoaderElement = document.querySelector('.page-loader');
+        if (pageLoaderElement) {
+          gsap.to(pageLoaderElement, {
+            opacity: 0,
+            duration: 0.3,
+            onComplete: () => {
+              if (pageLoaderElement) {
+                pageLoaderElement.style.display = 'none';
+              }
+            }
+          });
+        }
+      });
     }
   }
 
   onMounted(() => {
+    // 先显示加载遮罩
+    if (document.querySelector('.page-loader')) {
+      document.querySelector('.page-loader').style.display = 'flex';
+    }
+    
     console.log('Runtime config (public):', JSON.stringify(config.public, null, 2));
     document.querySelector('.scroll-to')?.addEventListener('click', (e) => {
       e.preventDefault();
@@ -265,20 +320,28 @@
     });
     detectArch();
     
-    // 初始化打字效果
-    setTimeout(() => {
-      initTypeEffect();
-    }, 500);
+    // 打字效果将在GSAP动画完成后初始化
+    // 不再直接在这里调用initTypeEffect
     
     // 加载本地字体
     const fontStyle = document.createElement('style');
+    // 字体文件使用绝对路径
+    const basePath = '';
+    
+    console.log('当前环境:', { 
+      hostname: window.location.hostname, 
+      pathname: window.location.pathname,
+      fontPath: `${basePath}/font/customfont.ttf`
+    });
+    
+    // 使用OSS上的字体文件
     fontStyle.textContent = `
       @font-face {
         font-family: 'CustomFont';
-        src: url('/font/customfont.ttf') format('truetype');
+        src: url('https://media.wyld.cc/onetap-chef/static/%E5%AD%97%E5%B8%AE%E7%8E%A9%E9%85%B7%E4%BD%93.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
-        font-display: swap;
+        font-display: fallback;
       }
       
       /* 添加字体载入过渡效果 */
@@ -290,6 +353,12 @@
       .fonts-loaded * {
         opacity: 1;
       }
+      
+      /* 定义备用字体 */
+      :root {
+        --main-font: 'CustomFont', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --title-font: 'CustomFont', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
     `;
     document.head.appendChild(fontStyle);
     
@@ -297,10 +366,28 @@
     document.body.classList.add('font-loading');
     
     // 加载字体并在完成后移除加载类
-    const font = new FontFace('CustomFont', 'url(/font/customfont.ttf)');
+    const fontUrl = `https://media.wyld.cc/onetap-chef/static/%E5%AD%97%E5%B8%AE%E7%8E%A9%E9%85%B7%E4%BD%93.ttf`;
+    console.log('尝试加载字体:', fontUrl);
+    
+    // 增加字体加载超时处理
+    let fontLoaded = false;
+    const fontLoadTimeout = setTimeout(() => {
+      if (!fontLoaded) {
+        console.log('字体加载超时，使用系统字体');
+        document.body.classList.remove('font-loading');
+      }
+    }, 3000); // 3秒超时
+    
+    // 尝试加载自定义字体
+    const font = new FontFace('CustomFont', `url(${fontUrl})`);
     
     font.load()
       .then(loadedFont => {
+        console.log('字体加载成功!');
+        fontLoaded = true;
+        clearTimeout(fontLoadTimeout);
+        
+        // 注册字体
         document.fonts.add(loadedFont);
         
         // 标记字体已加载
@@ -311,8 +398,25 @@
       })
       .catch(err => {
         console.error('字体加载失败:', err);
+        console.log('尝试使用备用字体');
+        
+        // 清除超时计时器
+        clearTimeout(fontLoadTimeout);
+        fontLoaded = true;
+        
+        // 加载失败时使用备用字体
+        const backupStyle = document.createElement('style');
+        backupStyle.textContent = `
+          :root {
+            --main-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --title-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+          }
+        `;
+        document.head.appendChild(backupStyle);
+        
         // 即使失败也移除加载状态
         document.body.classList.remove('font-loading');
+        document.body.classList.add('fonts-loaded');
       });
     
     // 动态加载GSAP库
@@ -896,17 +1000,19 @@
   }
   
   /* 添加active状态的样式，移除阴影 */
-  .app-store-btn:active, .android-btn:active {
-    transform: translateY(-2px);
-    filter: none;
-  }
-  
-  /* 添加store-btn的active状态样式 */
-  .store-btn:active {
-    box-shadow: none;
-    transform: translateY(-1px) scale(1.01);
-    background-color: rgba(255, 255, 255, 1);
-  }
+.app-store-btn:active, .android-btn:active {
+  transform: translateY(-2px);
+  filter: none;
+}
+
+/* 添加store-btn的active状态样式 */
+.store-btn:active {
+  box-shadow: none;
+  transform: translateY(-1px) scale(1.01);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+/* 移除active状态下的特殊样式，因为hover已经处理了 */
   
   /* 修改按钮为矩形布局 */
   .store-btn {
@@ -922,28 +1028,33 @@
   }
   
   .store-btn:hover {
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: none;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-color: var(--secondary-color);
-  }
-  
-  .store-btn img {
-    width: 28px;
-    height: 28px;
-    margin-right: 15px;
-    transition: all 0.3s ease;
-  }
-  
-  .store-btn:hover img {
-    transform: rotate(5deg) scale(1.1);
-  }
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: none;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-color: var(--secondary-color);
+}
+
+.store-btn img {
+  width: 28px;
+  height: 28px;
+  margin-right: 15px;
+}
+
+/* 添加悬停效果 */
+.store-btn:hover img {
+  filter: invert(23%) sepia(90%) saturate(7000%) hue-rotate(355deg) brightness(95%) contrast(85%);
+}
+
+.store-btn:hover span {
+  color: var(--secondary-color);
+}
   
   .store-btn span {
-    font-family: var(--main-font);
-    font-size: 18px;
-    font-weight: 500;
-  }
+  font-family: var(--main-font);
+  font-size: 18px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
   
   /* 无阴影按钮 */
   .primary-noshadow {
@@ -1758,6 +1869,21 @@
   /* 调整动画相关样式 */
   .gsap-title, .gsap-desc, .gsap-buttons {
     will-change: transform, opacity;
+    opacity: 0; /* 预先设置为不可见，避免闪烁 */
+  }
+  
+  /* 添加初始状态样式，防止加载时闪烁 */
+  .gsap-title {
+    transform: translateY(-50px) scale(0.9);
+  }
+  
+  .gsap-desc {
+    transform: translateX(-30px);
+    visibility: hidden;
+  }
+  
+  .gsap-buttons {
+    transform: translateY(30px);
   }
   
   .hero-content {
@@ -2159,17 +2285,56 @@
     line-height: 1.6;
     margin-bottom: 50px; /* 保持与原来相同的间距 */
     position: relative;
+    visibility: hidden; /* 初始状态为隐藏 */
   }
   
-  .typing-effect::after {
+  /* 光标已被完全隐藏 */
+  /* 以下内容被注释掉以移除光标
+  .typing-effect.typing-active::after {
     content: "|";
     animation: blink 0.7s infinite;
     font-weight: normal;
   }
+  */
   
   @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
+  }
+  
+  /* 页面加载遮罩 */
+  .page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+  
+  .loader-content {
+    text-align: center;
+  }
+  
+  .loader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(234, 62, 64, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--secondary-color);
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
   </style>
   
