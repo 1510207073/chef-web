@@ -1,75 +1,35 @@
-# Nuxt Minimal Starter
+# 运行项目
+pnpm i
+pnpm run dev
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+# 项目技术栈介绍
 
-## Setup
+## 核心框架
+- Nuxt.js 3.16.1 - Vue.js 的服务器端渲染框架
+- Vue.js 3.5.13 - 渐进式 JavaScript 框架
+- Vue Router 4.5.0 - Vue.js 的官方路由
 
-Make sure to install dependencies:
+## 开发工具
+- pnpm - 高性能的包管理器
+- TypeScript - 用于类型安全的 JavaScript 超集
 
+## 项目特点
+- 采用 Nuxt 3 框架，支持服务器端渲染 (SSR)
+- 使用 TypeScript 进行开发，提供更好的类型安全性
+- 基于 Vue 3 的组合式 API 开发
+- 使用 pnpm 作为包管理器，提供更快的依赖安装速度
+
+## 开发环境要求
+- Node.js 环境
+- pnpm 包管理器
+
+## 部署说明
+### GitHub Pages 部署
+1. 生成静态文件：
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+pnpm run generate
 ```
+2. 生成的静态文件位于 `.output/public` 目录
+3. 将该目录内容部署到 GitHub Pages
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+注意：本项目采用静态生成（Static Generation）模式部署，而非 SSR 模式，以确保在 GitHub Pages 上正常运行。
