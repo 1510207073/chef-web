@@ -108,7 +108,7 @@
   const appVersion = config.public.appVersion;
   const detectedArch = ref(null);
   const typeText = ref(null);
-  const textToType = "隔空手势操作，边学边做，秒变大厨";
+  const textToType = "隔空操作，边学边做，秒变大厨";
   const archDisplay = computed(() => {
     return detectedArch.value === 'arm64' ? 'Apple Silicon' : 'Intel';
   });
