@@ -51,7 +51,7 @@
             </div>
             <div class="container">
               <div class="hero-content">
-                <h2 class="hero-title gradient-text gsap-title">一键大厨 - 轻松烹饪美食</h2>
+                <h2 class="hero-title gradient-text gsap-title">一键大厨 - 轻松学做美食</h2>
                 <p class="hero-description gsap-desc typing-effect" ref="typeText"></p>
                 <div class="cta-buttons gsap-buttons">
                   <a href="#" class="app-store-btn">

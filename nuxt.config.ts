@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     baseURL: '/', // 使用根路径，适合自定义域名
     buildAssetsDir: '/static/',
     head: {
-      title: '一键大厨 - 轻松烹饪美食',
+      title: '一键大厨 - 轻松学做美食',
       htmlAttrs: {
         lang: 'zh-CN'
       },

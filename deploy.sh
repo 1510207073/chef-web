@@ -101,12 +101,12 @@ git lfs track "*.exe"
 git add .gitattributes
 
 # 配置用户信息
-git config user.name "WiseFett Deployer"
-git config user.email "deploy@wisefett.com"
+git config user.name "Chef Deployer"
+git config user.email "deploy@chef.com"
 
 # 使用自定义域名
 echo "设置自定义域名..."
-echo "wisefett.wyld.cc" > CNAME
+echo "chef.wyld.cc" > CNAME
 
 # 添加所有文件
 echo "添加所有文件到Git..."
@@ -131,7 +131,7 @@ git lfs ls-files
 
 # 推送到 gh-pages 分支
 echo "正在推送到GitHub Pages (使用Git LFS)..."
-git push -f git@github.com:1510207073/wisefett-web.git main:gh-pages
+git push -f git@github.com:1510207073/chef-web.git main:gh-pages
 
 # 如果推送失败，提供使用gh-pages模块的选项
 if [ $? -ne 0 ]; then
@@ -145,4 +145,4 @@ else
   echo "推送成功！"
 fi
 
-echo "部署完成！请访问 https://wisefett.wyld.cc 检查更新是否成功"
+echo "部署完成！请访问 https://chef.wyld.cc 检查更新是否成功"
