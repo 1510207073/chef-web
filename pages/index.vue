@@ -41,10 +41,10 @@
         <SwiperSlide>
           <section id="hero" class="section hero-section" data-section="hero">
             <div class="container">
-              <div class="hero-content animate-fade-in">
-                <h2 class="hero-title">一键大厨 - 轻松烹饪美食</h2>
-                <p class="hero-description">隔空手势操作，边做边学，轻松烹饪美食</p>
-                <div class="cta-buttons">
+              <div class="hero-content">
+                <h2 class="hero-title gradient-text gsap-title">一键大厨 - 轻松烹饪美食</h2>
+                <p class="hero-description gsap-desc">隔空手势操作，边学边做，秒变大厨</p>
+                <div class="cta-buttons gsap-buttons">
                   <a href="#" class="app-store-btn">
                     <div class="store-btn">
                       <img src="/images/appstore.svg" alt="App Store" />
@@ -61,6 +61,16 @@
               </div>
             </div>
             <div class="hero-bg"></div>
+            <!-- 添加厨房主题动画背景 -->
+            <div class="cooking-bg-animation">
+              <!-- 使用提供的SVG图标作为厨具元素 -->
+              <div class="kitchen-utensil bg01"></div>
+              <div class="kitchen-utensil bg02"></div>
+              <div class="kitchen-utensil bg03"></div>
+              <div class="kitchen-utensil bg04"></div>
+              <div class="kitchen-utensil bg05"></div>
+              <div class="kitchen-utensil bg06"></div>
+            </div>
           </section>
         </SwiperSlide>
       </Swiper>
@@ -74,6 +84,8 @@
               <a href="/terms" target="_blank" rel="noopener noreferrer" class="footer-link">使用条款</a>
               <span class="footer-separator">|</span>
               <a href="/privacy" target="_blank" rel="noopener noreferrer" class="footer-link">隐私政策</a>
+              <span class="footer-separator">|</span>
+              <a href="mailto:developer@wyld.cc" class="footer-link">联系我们: developer@wyld.cc</a>
             </div>
           </div>
         </div>
@@ -82,7 +94,7 @@
   </template>
   
   <script setup>
-  import { ref, computed, onMounted, watch } from 'vue';
+  import { ref, computed, onMounted, watch, nextTick } from 'vue';
   import { useRuntimeConfig } from '#app';
   import { Swiper, SwiperSlide } from 'swiper/vue';
   import { Autoplay, Pagination, Mousewheel } from 'swiper/modules';
@@ -164,6 +176,44 @@
   const navigateToSlide = (index) => {
     if (swiperInstance.value) swiperInstance.value.slideTo(index);
   };
+
+  // 页面加载后初始化GSAP动画
+  function initGSAPAnimations() {
+    // 确保GSAP已经加载
+    if (typeof gsap !== 'undefined') {
+      // 创建动画时间线
+      const tl = gsap.timeline({
+        defaults: { 
+          ease: "power2.out", 
+          duration: 1
+        }
+      });
+
+      // 设置元素初始状态，避免加载时闪烁
+      gsap.set('.gsap-title', { opacity: 0, y: -50, scale: 0.9 });
+      gsap.set('.gsap-desc', { opacity: 0, x: -30 });
+      gsap.set('.gsap-buttons', { opacity: 0, y: 30 });
+
+      // 添加动画序列
+      tl.to('.gsap-title', { 
+        opacity: 1, 
+        y: 0, 
+        scale: 1,
+        duration: 1.2
+      })
+      .to('.gsap-desc', { 
+        opacity: 1, 
+        x: 0,
+        duration: 1
+      }, "-=0.7") // 描述在标题动画70%时开始
+      .to('.gsap-buttons', { 
+        opacity: 1, 
+        y: 0,
+        duration: 0.8
+      }, "-=0.5"); // 按钮在描述动画50%时开始
+    }
+  }
+
   onMounted(() => {
     console.log('Runtime config (public):', JSON.stringify(config.public, null, 2));
     document.querySelector('.scroll-to')?.addEventListener('click', (e) => {
@@ -171,6 +221,57 @@
       navigateToSlide(2);
     });
     detectArch();
+    
+    // 加载本地字体
+    const fontStyle = document.createElement('style');
+    fontStyle.textContent = `
+      @font-face {
+        font-family: 'CustomFont';
+        src: url('/font/customfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      
+      /* 添加字体载入过渡效果 */
+      .font-loading * {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+      
+      .fonts-loaded * {
+        opacity: 1;
+      }
+    `;
+    document.head.appendChild(fontStyle);
+    
+    // 字体预加载
+    document.body.classList.add('font-loading');
+    
+    // 加载字体并在完成后移除加载类
+    const font = new FontFace('CustomFont', 'url(/font/customfont.ttf)');
+    
+    font.load()
+      .then(loadedFont => {
+        document.fonts.add(loadedFont);
+        
+        // 标记字体已加载
+        setTimeout(() => {
+          document.body.classList.remove('font-loading');
+          document.body.classList.add('fonts-loaded');
+        }, 100);
+      })
+      .catch(err => {
+        console.error('字体加载失败:', err);
+        // 即使失败也移除加载状态
+        document.body.classList.remove('font-loading');
+      });
+    
+    // 动态加载GSAP库
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js';
+    script.onload = initGSAPAnimations;
+    document.head.appendChild(script);
   });
   </script>
   
@@ -183,6 +284,8 @@
     --border-color: rgba(0, 0, 0, 0.1);
     --card-bg: rgba(255, 255, 255, 0.8);
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --main-font: 'CustomFont', -apple-system, BlinkMacSystemFont, sans-serif;
+    --title-font: 'CustomFont', sans-serif;
   }
   
   * {
@@ -204,7 +307,7 @@
   }
   
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: var(--main-font);
     line-height: 1.6;
     color: var(--dark-text);
     background-color: var(--primary-color);
@@ -551,11 +654,10 @@
   }
   
   .logo-text {
-    /* font-family: 'Montserrat', sans-serif; */
-    /* Increase font-weight for boldness */
-    font-weight: 700;
-    font-size: 28px;
-    letter-spacing: 1px;
+    font-family: var(--title-font);
+    font-weight: bold;
+    font-size: 24px;
+    letter-spacing: 0.5px;
     color: var(--dark-text);
     margin: 0;
     position: relative;
@@ -564,11 +666,11 @@
   }
   
   .logo-text-highlight {
-    /* Increase font-weight for boldness */
-    font-weight: 700;
+    font-family: var(--title-font);
+    font-weight: bold;
     color: var(--secondary-color);
     position: relative;
-    letter-spacing: 2.5px;
+    letter-spacing: 1px;
     transition: all 0.3s ease;
   }
   
@@ -682,22 +784,40 @@
   }
   
   .hero-title {
-    font-size: 48px;
-    margin-bottom: 24px;
-    font-weight: 700;
-    background: linear-gradient(to right, #333, #EA3E40);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    font-family: var(--title-font);
+    font-size: 50px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    color: var(--secondary-color);
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.15);
+    position: relative;
+    display: inline-block;
+    letter-spacing: 1px;
+    transform-origin: center;
+    animation: bounceTitle 3s infinite alternate ease-in-out;
+  }
+  
+  @keyframes bounceTitle {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02) rotate(0.5deg);
+    }
   }
   
   .hero-description {
-    font-size: 22px;
+    font-family: var(--main-font);
+    font-size: 24px;
     max-width: 650px;
     margin: 0 auto 50px;
     opacity: 0.9;
     line-height: 1.6;
     color: #333333;
+    letter-spacing: 0.2px;
+    position: relative;
+    display: inline-block;
+    font-weight: 500;
   }
   
   .cta-buttons {
@@ -721,20 +841,36 @@
   .store-btn {
     display: flex;
     align-items: center;
-    background-color: #EA3E40;
-    border-radius: 8px;
-    padding: 10px 20px;
-    color: white;
+    border-radius: 16px;
+    padding: 12px 24px;
+    border: 2px solid #000000;
+    color: #000000;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .store-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 6px 12px rgba(234, 62, 64, 0.25);
+    background-color: rgba(255, 255, 255, 0.95);
+    border-color: var(--secondary-color);
   }
   
   .store-btn img {
-    width: 24px;
-    height: 24px;
-    margin-right: 12px;
+    width: 28px;
+    height: 28px;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+  }
+  
+  .store-btn:hover img {
+    transform: rotate(5deg) scale(1.1);
   }
   
   .store-btn span {
-    font-size: 16px;
+    font-family: var(--main-font);
+    font-size: 18px;
     font-weight: 500;
   }
   
@@ -814,6 +950,7 @@
   }
   
   .section-title {
+    font-family: var(--title-font);
     font-size: 42px;
     background: linear-gradient(to right, #333, #EA3E40);
     -webkit-background-clip: text;
@@ -821,9 +958,12 @@
     margin-bottom: 15px;
     position: relative;
     z-index: 1;
+    letter-spacing: 0.5px;
+    font-weight: bold;
   }
   
   .section-subtitle {
+    font-family: var(--main-font);
     font-size: 20px;
     color: #333333;
     max-width: 700px;
@@ -832,6 +972,8 @@
     position: relative;
     z-index: 1;
     line-height: 1.5;
+    letter-spacing: 0.2px;
+    font-weight: 500;
   }
   
   .value-wrapper {
@@ -887,12 +1029,14 @@
   }
   
   .value-item h3 {
+    font-family: var(--title-font);
     font-size: 24px;
     margin-bottom: 15px;
     color: var(--dark-text);
     position: relative;
     display: inline-block;
-    font-weight: 600;
+    font-weight: bold;
+    letter-spacing: 0.2px;
   }
   
   .value-item h3:after {
@@ -938,9 +1082,11 @@
   }
   
   .value-item p {
+    font-family: var(--main-font);
     color: #333333;
     line-height: 1.7;
     font-size: 16px;
+    letter-spacing: 0.1px;
   }
   
   /* 下载部分优化 */
@@ -1009,16 +1155,20 @@
   }
   
   .download-card h3 {
+    font-family: var(--title-font);
     font-size: 28px;
     color: var(--dark-text);
-    font-weight: 600;
+    font-weight: bold;
     margin-bottom: 20px;
+    letter-spacing: 0.2px;
   }
   
   .download-card p {
+    font-family: var(--main-font);
     color: #333333;
     font-size: 16px;
     margin-bottom: 30px;
+    letter-spacing: 0.1px;
   }
   
   .download-with-select {
@@ -1127,6 +1277,7 @@
     margin: 0;
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);
+    font-family: var(--main-font);
   }
   
   .footer-links {
@@ -1134,12 +1285,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: var(--main-font);
   }
   
   .footer-link {
     color: rgba(0, 0, 0, 0.6);
     text-decoration: none;
     transition: color 0.3s ease;
+    font-family: var(--main-font);
   }
   
   .footer-link:hover {
@@ -1371,8 +1524,29 @@
     50% { opacity: 0.7; }
   }
   
-  /* 金融动画背景元素 - 共用样式 */
-  .finance-bg-animation {
+  /* 删除原有的金融动画背景元素 */
+  .finance-bg-animation,
+  .stock-graph,
+  .stock-dots,
+  .stock-line,
+  .line1, .line2, .line3,
+  .stock-candle,
+  .candle1, .candle2, .candle3, .candle4,
+  .data-circle,
+  .circle1, .circle2, .circle3,
+  .data-flow,
+  .flow1, .flow2, .flow3,
+  .data-grid,
+  .market-pulse,
+  .pulse1, .pulse2, .pulse3,
+  .market-chart,
+  .market-symbols {
+    display: none;
+  }
+  
+  /* 添加烹饪主题动画背景 - 已隐藏 */
+  .cooking-bg-animation {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -1380,292 +1554,145 @@
     height: 100%;
     z-index: 0;
     overflow: hidden;
-    opacity: 0.5;
-    pointer-events: none;
+    opacity: 0.3;
   }
   
-  /* 首页 - 股票图表动画 */
-  .stock-graph {
+  /* 厨具元素样式 - 使用提供的SVG图标 */
+  .kitchen-utensil {
     position: absolute;
-    width: 50%;
-    height: 30%;
-    top: 15%;
-    right: -10%;
-    border-left: 2px solid rgba(234, 62, 64, 0.4);
-    border-bottom: 2px solid rgba(234, 62, 64, 0.4);
+    opacity: 0.35;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 0 5px rgba(234, 62, 64, 0.2)) invert(30%) sepia(20%) saturate(800%) hue-rotate(325deg) brightness(95%);
+    animation: floatUtensil 20s infinite ease-in-out;
+    /* 限制在水平方向中间70%区域 */
+    left: calc(15% + var(--utensil-left-offset, 0%));
+    transform: scale(0.7);
   }
   
-  .stock-dots {
-    position: absolute;
-    width: 40%;
-    height: 40%;
-    bottom: 10%;
-    left: 10%;
-    background-image: radial-gradient(circle, rgba(234, 62, 64, 0.4) 1.5px, transparent 1.5px);
-    background-size: 30px 30px;
-    opacity: 0.6;
-  }
-  
-  .stock-line {
-    position: absolute;
-    background: linear-gradient(90deg, transparent, rgba(234, 62, 64, 0.6), transparent);
-    height: 2px;
-  }
-  
-  .line1 {
-    width: 60%;
-    top: 25%;
-    right: 5%;
-    animation: stockLine 8s infinite ease-in-out;
-  }
-  
-  .line2 {
-    width: 50%;
-    top: 40%;
-    right: 10%;
-    animation: stockLine 12s infinite ease-in-out;
-    animation-delay: 1s;
-  }
-  
-  .line3 {
-    width: 40%;
-    top: 55%;
-    right: 15%;
-    animation: stockLine 10s infinite ease-in-out;
-    animation-delay: 2s;
-  }
-  
-  .stock-candle {
-    position: absolute;
-    width: 6px;
-    background-color: rgba(234, 62, 64, 0.5);
-    transform-origin: bottom;
-    animation: candleScale 10s infinite ease-in-out;
-    box-shadow: 0 0 8px rgba(234, 62, 64, 0.4);
-  }
-  
-  .candle1 {
-    height: 80px;
-    bottom: 20%;
-    right: 30%;
-    animation-delay: 0s;
-  }
-  
-  .candle2 {
-    height: 120px;
-    bottom: 20%;
-    right: 35%;
-    animation-delay: 2s;
-  }
-  
-  .candle3 {
+  /* 使用提供的SVG图标 - 避开中央区域 */
+  .bg01 {
+    width: 60px;
     height: 60px;
-    bottom: 20%;
-    right: 40%;
-    animation-delay: 4s;
+    top: 12%; 
+    --utensil-left-offset: 5%;
+    background-image: url("/images/bg01.svg");
+    animation: floatUtensil 20s infinite ease-in-out;
   }
   
-  .candle4 {
-    height: 100px;
-    bottom: 20%;
-    right: 45%;
-    animation-delay: 6s;
+  .bg02 {
+    width: 55px;
+    height: 55px;
+    bottom: 12%;
+    --utensil-left-offset: 10%;
+    background-image: url("/images/bg02.svg");
+    animation: floatUtensil 20s infinite ease-in-out 2s;
   }
   
-  @keyframes stockLine {
-    0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 4px rgba(234, 62, 64, 0.2); }
-    50% { transform: translateY(20px) scale(0.97); box-shadow: 0 0 12px rgba(234, 62, 64, 0.5); }
+  .bg03 {
+    width: 50px;
+    height: 50px;
+    top: 18%;
+    --utensil-left-offset: 60%;
+    background-image: url("/images/bg03.svg");
+    animation: floatUtensil 20s infinite ease-in-out 1s;
   }
   
-  @keyframes candleScale {
-    0%, 100% { transform: scaleY(1); box-shadow: 0 0 8px rgba(234, 62, 64, 0.4); }
-    50% { transform: scaleY(0.8); box-shadow: 0 0 15px rgba(234, 62, 64, 0.6); }
+  .bg04 {
+    width: 65px;
+    height: 65px;
+    bottom: 18%;
+    --utensil-left-offset: 65%;
+    background-image: url("/images/bg04.svg");
+    animation: floatUtensil 20s infinite ease-in-out 5s;
   }
   
-  /* 第二页 - 数据流动和分析 */
-  .finance-bg-animation.alt {
-    opacity: 0.5;
+  .bg05 {
+    width: 45px;
+    height: 45px;
+    top: 75%;
+    --utensil-left-offset: 25%;
+    background-image: url("/images/bg05.svg");
+    animation: floatUtensil 20s infinite ease-in-out 3s;
   }
   
-  .data-circle {
-    position: absolute;
-    border-radius: 50%;
-    border: 2px solid rgba(234, 62, 64, 0.5);
-    animation: pulseCircle 15s infinite ease-in-out;
-    box-shadow: 0 0 15px rgba(234, 62, 64, 0.3);
+  .bg06 {
+    width: 55px;
+    height: 55px;
+    top: 8%;
+    --utensil-left-offset: 35%;
+    background-image: url("/images/bg06.svg");
+    animation: floatUtensil 20s infinite ease-in-out 7s;
   }
   
-  .circle1 {
-    width: 300px;
-    height: 300px;
-    top: 20%;
-    left: 10%;
-    animation-delay: 0s;
-  }
-  
-  .circle2 {
-    width: 200px;
-    height: 200px;
-    top: 50%;
-    right: 15%;
-    animation-delay: 5s;
-  }
-  
-  .circle3 {
-    width: 150px;
-    height: 150px;
-    bottom: 15%;
-    left: 30%;
-    animation-delay: 10s;
-  }
-  
-      .data-flow {
-      position: absolute;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, rgba(234, 62, 64, 0.7), transparent);
-      animation: dataFlow 8s infinite linear;
-      box-shadow: 0 0 10px rgba(234, 62, 64, 0.4);
+  /* 修改原有的浮动动画，减少浮动距离，降低颜色变化幅度 */
+  @keyframes floatUtensil {
+    0%, 100% { 
+      transform: translateY(0) rotate(0deg) scale(0.7);
+      filter: drop-shadow(0 0 5px rgba(234, 62, 64, 0.2)) invert(30%) sepia(20%) saturate(800%) hue-rotate(325deg) brightness(95%);
     }
-  
-  .flow1 {
-    width: 40%;
-    top: 30%;
-    left: 0;
-  }
-  
-  .flow2 {
-    width: 30%;
-    top: 60%;
-    right: 0;
-    animation-delay: 3s;
-  }
-  
-  .flow3 {
-    width: 25%;
-    bottom: 25%;
-    left: 20%;
-    animation-delay: 6s;
-  }
-  
-  .data-grid {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-image: 
-      linear-gradient(rgba(234, 62, 64, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(234, 62, 64, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-    opacity: 0.5;
-  }
-  
-      @keyframes pulseCircle {
-      0%, 100% { transform: scale(1); opacity: 0.6; border-color: rgba(234, 62, 64, 0.5); }
-      50% { transform: scale(1.2); opacity: 0.4; border-color: rgba(234, 62, 64, 0.7); }
+    50% { 
+      transform: translateY(-8px) rotate(2deg) scale(0.7);
+      filter: drop-shadow(0 0 8px rgba(234, 62, 64, 0.3)) invert(30%) sepia(20%) saturate(900%) hue-rotate(325deg) brightness(100%);
     }
-  
-  @keyframes dataFlow {
-    0% { transform: translateX(-100%); opacity: 0; }
-    50% { opacity: 1; box-shadow: 0 0 20px rgba(234, 62, 64, 0.6); }
-    100% { transform: translateX(100%); opacity: 0; }
   }
   
-  /* 第三页 - 市场脉冲 */
-  .finance-bg-animation.third {
-    opacity: 0.5;
+  /* 删除不需要的类名 */
+  .knife, .fork, .cleaver, .pot, .chopsticks, .bottle {
+    display: none;
   }
   
-  .market-pulse {
-    position: absolute;
-    border-radius: 50%;
-    background-color: rgba(234, 62, 64, 0.2);
-    transform: scale(0);
-    animation: marketPulse 12s infinite ease-out;
-    border: 1px solid rgba(234, 62, 64, 0.3);
+  /* 删除不需要的动画 */
+  .unused-animations {
+    display: none;
   }
   
-  .pulse1 {
-    width: 300px;
-    height: 300px;
-    top: 20%;
-    left: 50%;
-    animation-delay: 0s;
+  /* 标题渐变滚动效果 - 更明亮活泼 */
+  .gradient-text {
+    font-family: var(--title-font);
+    background-image: linear-gradient(
+      to right,
+      #FF6B6C,
+      #EA3E40,
+      #FF4438,
+      #EA3E40,
+      #FF6B6C
+    );
+    background-size: 300% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: textGradientScroll 6s linear infinite;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 3.2rem;
   }
   
-  .pulse2 {
-    width: 400px;
-    height: 400px;
-    top: 40%;
-    left: 30%;
-    animation-delay: 4s;
+  /* 删除阴影伪元素 */
+  .gradient-text::before {
+    content: none;
   }
   
-  .pulse3 {
-    width: 500px;
-    height: 500px;
-    bottom: 10%;
-    right: 20%;
-    animation-delay: 8s;
+  @keyframes textGradientScroll {
+    0% {
+      background-position: 0% center;
+    }
+    100% {
+      background-position: 300% center;
+    }
   }
   
-  .market-chart {
-    position: absolute;
-    width: 50%;
-    height: 30%;
-    bottom: 10%;
-    left: 5%;
-    border-top: 2px solid rgba(234, 62, 64, 0.4);
-    background-image: 
-      linear-gradient(90deg, transparent, rgba(234, 62, 64, 0.3) 2px, transparent 2px),
-      linear-gradient(rgba(234, 62, 64, 0.2) 1px, transparent 1px);
-    background-size: 40px 20px;
-    opacity: 0.7;
-    box-shadow: 0 0 15px rgba(234, 62, 64, 0.2);
+  /* 调整动画相关样式 */
+  .gsap-title, .gsap-desc, .gsap-buttons {
+    will-change: transform, opacity;
   }
   
-  .market-symbols {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    opacity: 0.25;
+  .hero-content {
+    overflow: hidden;
   }
   
-  .market-symbols span {
-    font-size: 3.5rem;
-    color: rgba(234, 62, 64, 0.7);
-    margin: 2rem;
-    animation: floatSymbol 10s infinite ease-in-out;
-    opacity: 0.5;
-    text-shadow: 0 0 10px rgba(234, 62, 64, 0.5);
-  }
-  
-  .market-symbols span:nth-child(1) { animation-delay: 0s; }
-  .market-symbols span:nth-child(2) { animation-delay: 2s; }
-  .market-symbols span:nth-child(3) { animation-delay: 4s; }
-  .market-symbols span:nth-child(4) { animation-delay: 6s; }
-  .market-symbols span:nth-child(5) { animation-delay: 8s; }
-  
-  @keyframes marketPulse {
-    0% { transform: scale(0); opacity: 0.7; box-shadow: 0 0 5px rgba(234, 62, 64, 0.3); }
-    50% { opacity: 0.2; box-shadow: 0 0 30px rgba(234, 62, 64, 0.5); }
-    100% { transform: scale(3); opacity: 0; box-shadow: 0 0 0 rgba(234, 62, 64, 0); }
-  }
-  
-  @keyframes floatSymbol {
-    0%, 100% { transform: translateY(0) rotate(0deg); text-shadow: 0 0 10px rgba(234, 62, 64, 0.5); }
-    50% { transform: translateY(-20px) rotate(5deg); text-shadow: 0 0 20px rgba(234, 62, 64, 0.8); }
-  }
-  
-  /* 添加架构显示样式 */
-  .detected-arch {
-    display: inline-block;
-    font-size: 0.9em;
-    margin-left: 5px;
-  }
+
   </style>
   
