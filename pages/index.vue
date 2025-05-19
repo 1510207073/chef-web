@@ -14,7 +14,7 @@
           </div>
           <nav class="navigation">
             <ul>
-              <li><a href="#hero" @click.prevent="navigateToSlide(0)">首页</a></li>
+              <!-- 隐藏导航链接 -->
             </ul>
           </nav>
         </div>
@@ -45,7 +45,18 @@
                 <h2 class="hero-title">一键大厨 - 轻松烹饪美食</h2>
                 <p class="hero-description">隔空手势操作，边做边学，轻松烹饪美食</p>
                 <div class="cta-buttons">
-                  <a href="#" class="btn primary-noshadow">立即下载</a>
+                  <a href="#" class="app-store-btn">
+                    <div class="store-btn">
+                      <img src="/images/appstore.svg" alt="App Store" />
+                      <span>App Store 下载</span>
+                    </div>
+                  </a>
+                  <a href="#" class="android-btn">
+                    <div class="store-btn">
+                      <img src="/images/android.svg" alt="Android" />
+                      <span>Android 下载</span>
+                    </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -693,6 +704,38 @@
     display: flex;
     justify-content: center;
     gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .app-store-btn, .android-btn {
+    transition: all 0.3s ease;
+    display: block;
+  }
+  
+  .app-store-btn:hover, .android-btn:hover {
+    transform: translateY(-5px);
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+  }
+  
+  /* 修改按钮为矩形布局 */
+  .store-btn {
+    display: flex;
+    align-items: center;
+    background-color: #EA3E40;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: white;
+  }
+  
+  .store-btn img {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+  }
+  
+  .store-btn span {
+    font-size: 16px;
+    font-weight: 500;
   }
   
   /* 无阴影按钮 */
@@ -742,8 +785,9 @@
       gap: 15px;
     }
     
-    .btn {
-      min-width: 200px;
+    .app-store-btn svg, .android-btn svg {
+      width: 140px;
+      height: 42px;
     }
   }
   
