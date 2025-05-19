@@ -40,10 +40,19 @@
       >
         <SwiperSlide>
           <section id="hero" class="section hero-section" data-section="hero">
+            <div class="animated-background">
+              <div class="bg-gradient"></div>
+              <div class="bg-pattern"></div>
+              <div class="bg-shape shape1"></div>
+              <div class="bg-shape shape2"></div>
+              <div class="bg-shape shape3"></div>
+              <div class="kitchen-icon icon1"></div>
+              <div class="kitchen-icon icon2"></div>
+            </div>
             <div class="container">
               <div class="hero-content">
                 <h2 class="hero-title gradient-text gsap-title">一键大厨 - 轻松烹饪美食</h2>
-                <p class="hero-description gsap-desc">隔空手势操作，边学边做，秒变大厨</p>
+                <p class="hero-description gsap-desc typing-effect" ref="typeText"></p>
                 <div class="cta-buttons gsap-buttons">
                   <a href="#" class="app-store-btn">
                     <div class="store-btn">
@@ -59,17 +68,6 @@
                   </a>
                 </div>
               </div>
-            </div>
-            <div class="hero-bg"></div>
-            <!-- 添加厨房主题动画背景 -->
-            <div class="cooking-bg-animation">
-              <!-- 使用提供的SVG图标作为厨具元素 -->
-              <div class="kitchen-utensil bg01"></div>
-              <div class="kitchen-utensil bg02"></div>
-              <div class="kitchen-utensil bg03"></div>
-              <div class="kitchen-utensil bg04"></div>
-              <div class="kitchen-utensil bg05"></div>
-              <div class="kitchen-utensil bg06"></div>
             </div>
           </section>
         </SwiperSlide>
@@ -94,7 +92,7 @@
   </template>
   
   <script setup>
-  import { ref, computed, onMounted, watch, nextTick } from 'vue';
+  import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
   import { useRuntimeConfig } from '#app';
   import { Swiper, SwiperSlide } from 'swiper/vue';
   import { Autoplay, Pagination, Mousewheel } from 'swiper/modules';
@@ -107,6 +105,8 @@
   const config = useRuntimeConfig();
   const appVersion = config.public.appVersion;
   const detectedArch = ref(null);
+  const typeText = ref(null);
+  const textToType = "隔空手势操作，边学边做，秒变大厨";
   const archDisplay = computed(() => {
     return detectedArch.value === 'arm64' ? 'Apple Silicon' : 'Intel';
   });
@@ -167,6 +167,49 @@
   function trackDownload(platform, arch) {
     console.log(`用户下载 ${platform} 版本，架构: ${arch}`);
   }
+  
+  // 打字效果实现
+  let typeTimer = null;
+  
+  function initTypeEffect() {
+    if (typeText.value) {
+      runTypeEffect();
+      
+      // 每3秒重新执行一次
+      typeTimer = setInterval(() => {
+        runTypeEffect();
+      }, 10000);
+    }
+  }
+  
+  function runTypeEffect() {
+    if (!typeText.value) return;
+    
+    const textElement = typeText.value;
+    textElement.textContent = '';
+    
+    // 先用透明文本占位，保证高度
+    textElement.innerHTML = `<span style="visibility:hidden;">${textToType}</span>`;
+    
+    let charIndex = 0;
+    
+    // 清除之前可能存在的typing定时器
+    if (window.typingInterval) {
+      clearInterval(window.typingInterval);
+    }
+    
+    // 逐个字符打印
+    window.typingInterval = setInterval(() => {
+      if (charIndex < textToType.length) {
+        // 替换占位文本
+        textElement.innerHTML = `${textToType.substring(0, charIndex + 1)}`;
+        charIndex++;
+      } else {
+        clearInterval(window.typingInterval);
+      }
+    }, 100); // 调整打字速度
+  }
+  
   const onSwiper = (swiper) => {
     swiperInstance.value = swiper;
   };
@@ -222,6 +265,11 @@
     });
     detectArch();
     
+    // 初始化打字效果
+    setTimeout(() => {
+      initTypeEffect();
+    }, 500);
+    
     // 加载本地字体
     const fontStyle = document.createElement('style');
     fontStyle.textContent = `
@@ -272,6 +320,16 @@
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js';
     script.onload = initGSAPAnimations;
     document.head.appendChild(script);
+  });
+  
+  // 在组件卸载时清除定时器
+  onUnmounted(() => {
+    if (typeTimer) {
+      clearInterval(typeTimer);
+    }
+    if (window.typingInterval) {
+      clearInterval(window.typingInterval);
+    }
   });
   </script>
   
@@ -780,7 +838,7 @@
     margin: 0 auto;
     padding: 0 20px;
     position: relative;
-    z-index: 2;
+    z-index: 3;
   }
   
   .hero-title {
@@ -816,7 +874,7 @@
     color: #333333;
     letter-spacing: 0.2px;
     position: relative;
-    display: inline-block;
+    display: block; /* 确保是块级元素 */
     font-weight: 500;
   }
   
@@ -834,7 +892,20 @@
   
   .app-store-btn:hover, .android-btn:hover {
     transform: translateY(-5px);
-    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    filter: none;
+  }
+  
+  /* 添加active状态的样式，移除阴影 */
+  .app-store-btn:active, .android-btn:active {
+    transform: translateY(-2px);
+    filter: none;
+  }
+  
+  /* 添加store-btn的active状态样式 */
+  .store-btn:active {
+    box-shadow: none;
+    transform: translateY(-1px) scale(1.01);
+    background-color: rgba(255, 255, 255, 1);
   }
   
   /* 修改按钮为矩形布局 */
@@ -846,13 +917,13 @@
     border: 2px solid #000000;
     color: #000000;
     background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     transition: all 0.3s ease;
   }
   
   .store-btn:hover {
     transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 6px 12px rgba(234, 62, 64, 0.25);
+    box-shadow: none;
     background-color: rgba(255, 255, 255, 0.95);
     border-color: var(--secondary-color);
   }
@@ -1693,6 +1764,412 @@
     overflow: hidden;
   }
   
-
+  /* 大型背景图和动画效果 */
+  .animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+  }
+  
+  /* 基础渐变背景 */
+  .bg-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+      #ffffff 0%, 
+      #f8f8f8 30%, 
+      #f5f5f5 50%, 
+      #f0f0f0 70%, 
+      #f9f9f9 100%);
+    animation: gradientShift 15s ease infinite;
+  }
+  
+  /* 点状图案背景 */
+  .bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(rgba(234, 62, 64, 0.08) 1px, transparent 1px),
+      radial-gradient(rgba(234, 62, 64, 0.05) 2px, transparent 2px);
+    background-size: 30px 30px, 50px 50px;
+    background-position: 0 0, 15px 15px;
+    opacity: 0.5;
+    animation: patternFloat 60s linear infinite;
+  }
+  
+  /* 添加厨具轮廓作为背景元素 */
+  .bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.35;
+    animation: shapeFloat 25s ease-in-out infinite;
+  }
+  
+  .shape1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(234, 62, 64, 0.2) 0%, rgba(234, 62, 64, 0.05) 50%, rgba(234, 62, 64, 0) 70%);
+    top: -150px;
+    left: -100px;
+    animation-delay: 0s;
+  }
+  
+  .shape2 {
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(255, 186, 90, 0.2) 0%, rgba(255, 186, 90, 0.05) 50%, rgba(255, 186, 90, 0) 70%);
+    bottom: -200px;
+    right: -150px;
+    animation-delay: 5s;
+  }
+  
+  .shape3 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 70%);
+    top: 40%;
+    right: 15%;
+    animation-delay: 2s;
+  }
+  
+  /* 添加烹饪主题动画背景 - 已隐藏 */
+  .cooking-bg-animation {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0.3;
+  }
+  
+  /* 厨具元素样式 - 使用提供的SVG图标 */
+  .kitchen-utensil {
+    position: absolute;
+    opacity: 0.35;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 0 5px rgba(234, 62, 64, 0.2)) invert(30%) sepia(20%) saturate(800%) hue-rotate(325deg) brightness(95%);
+    animation: floatUtensil 20s infinite ease-in-out;
+    /* 限制在水平方向中间70%区域 */
+    left: calc(15% + var(--utensil-left-offset, 0%));
+    transform: scale(0.7);
+  }
+  
+  /* 使用提供的SVG图标 - 避开中央区域 */
+  .bg01 {
+    width: 60px;
+    height: 60px;
+    top: 12%; 
+    --utensil-left-offset: 5%;
+    background-image: url("/images/bg01.svg");
+    animation: floatUtensil 20s infinite ease-in-out;
+  }
+  
+  .bg02 {
+    width: 55px;
+    height: 55px;
+    bottom: 12%;
+    --utensil-left-offset: 10%;
+    background-image: url("/images/bg02.svg");
+    animation: floatUtensil 20s infinite ease-in-out 2s;
+  }
+  
+  .bg03 {
+    width: 50px;
+    height: 50px;
+    top: 18%;
+    --utensil-left-offset: 60%;
+    background-image: url("/images/bg03.svg");
+    animation: floatUtensil 20s infinite ease-in-out 1s;
+  }
+  
+  .bg04 {
+    width: 65px;
+    height: 65px;
+    bottom: 18%;
+    --utensil-left-offset: 65%;
+    background-image: url("/images/bg04.svg");
+    animation: floatUtensil 20s infinite ease-in-out 5s;
+  }
+  
+  .bg05 {
+    width: 45px;
+    height: 45px;
+    top: 75%;
+    --utensil-left-offset: 25%;
+    background-image: url("/images/bg05.svg");
+    animation: floatUtensil 20s infinite ease-in-out 3s;
+  }
+  
+  .bg06 {
+    width: 55px;
+    height: 55px;
+    top: 8%;
+    --utensil-left-offset: 35%;
+    background-image: url("/images/bg06.svg");
+    animation: floatUtensil 20s infinite ease-in-out 7s;
+  }
+  
+  /* 修改原有的浮动动画，减少浮动距离，降低颜色变化幅度 */
+  @keyframes floatUtensil {
+    0%, 100% { 
+      transform: translateY(0) rotate(0deg) scale(0.7);
+      filter: drop-shadow(0 0 5px rgba(234, 62, 64, 0.2)) invert(30%) sepia(20%) saturate(800%) hue-rotate(325deg) brightness(95%);
+    }
+    50% { 
+      transform: translateY(-8px) rotate(2deg) scale(0.7);
+      filter: drop-shadow(0 0 8px rgba(234, 62, 64, 0.3)) invert(30%) sepia(20%) saturate(900%) hue-rotate(325deg) brightness(100%);
+    }
+  }
+  
+  /* 删除不需要的类名 */
+  .knife, .fork, .cleaver, .pot, .chopsticks, .bottle {
+    display: none;
+  }
+  
+  /* 删除不需要的动画 */
+  .unused-animations {
+    display: none;
+  }
+  
+  /* 标题渐变滚动效果 - 更明亮活泼 */
+  .gradient-text {
+    font-family: var(--title-font);
+    background-image: linear-gradient(
+      to right,
+      #FF6B6C,
+      #EA3E40,
+      #FF4438,
+      #EA3E40,
+      #FF6B6C
+    );
+    background-size: 300% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: textGradientScroll 6s linear infinite;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 3.2rem;
+  }
+  
+  /* 删除阴影伪元素 */
+  .gradient-text::before {
+    content: none;
+  }
+  
+  @keyframes textGradientScroll {
+    0% {
+      background-position: 0% center;
+    }
+    100% {
+      background-position: 300% center;
+    }
+  }
+  
+  /* 调整动画相关样式 */
+  .gsap-title, .gsap-desc, .gsap-buttons {
+    will-change: transform, opacity;
+  }
+  
+  .hero-content {
+    overflow: hidden;
+  }
+  
+  /* 大型背景图和动画效果 */
+  .animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+  }
+  
+  /* 基础渐变背景 */
+  .bg-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+      #ffffff 0%, 
+      #f8f8f8 30%, 
+      #f5f5f5 50%, 
+      #f0f0f0 70%, 
+      #f9f9f9 100%);
+    animation: gradientShift 15s ease infinite;
+  }
+  
+  /* 点状图案背景 */
+  .bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(rgba(234, 62, 64, 0.08) 1px, transparent 1px),
+      radial-gradient(rgba(234, 62, 64, 0.05) 2px, transparent 2px);
+    background-size: 30px 30px, 50px 50px;
+    background-position: 0 0, 15px 15px;
+    opacity: 0.5;
+    animation: patternFloat 60s linear infinite;
+  }
+  
+  /* 添加厨具图标背景元素 */
+  .bg-kitchen-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    opacity: 0.08;
+  }
+  
+  .kitchen-element {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.4;
+    filter: grayscale(20%) opacity(70%);
+  }
+  
+  .element1 {
+    width: 500px;
+    height: 500px;
+    background-image: url('/images/bg01.svg');
+    top: 10%;
+    left: 5%;
+    transform: rotate(-15deg) scale(2);
+    opacity: 0.06;
+    animation: floatElement 30s infinite ease-in-out;
+  }
+  
+  .element2 {
+    width: 600px;
+    height: 600px;
+    background-image: url('/images/bg03.svg');
+    bottom: 5%;
+    right: 5%;
+    transform: rotate(15deg) scale(2.2);
+    opacity: 0.05;
+    animation: floatElement 30s infinite ease-in-out 5s;
+  }
+  
+  /* 轻微光效背景 */
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 0%, 
+      rgba(255, 255, 255, 0.5) 0%, 
+      rgba(255, 255, 255, 0.3) 20%, 
+      rgba(255, 255, 255, 0) 60%);
+    z-index: 2;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  
+  /* 细微网格线 */
+  .hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 1;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  
+  /* 背景动画 */
+  @keyframes gradientShift {
+    0%, 100% {
+      opacity: 0.85;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes patternFloat {
+    0% {
+      background-position: 0 0, 15px 15px;
+    }
+    100% {
+      background-position: 100px 100px, 115px 115px;
+    }
+  }
+  
+  /* 动画定义 */
+  @keyframes shapeFloat {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      opacity: 0.35;
+    }
+    50% {
+      transform: translateY(-30px) scale(1.05);
+      opacity: 0.45;
+    }
+  }
+  
+  @keyframes floatElement {
+    0%, 100% {
+      transform: rotate(-15deg) scale(2) translateY(0);
+    }
+    50% {
+      transform: rotate(-12deg) scale(2.05) translateY(-10px);
+    }
+  }
+  
+  /* 打字效果样式 */
+  .typing-effect {
+    display: block; /* 确保是块级元素 */
+    min-height: 40px; /* 设置最小高度，保持占位 */
+    line-height: 1.6;
+    margin-bottom: 50px; /* 保持与原来相同的间距 */
+    position: relative;
+  }
+  
+  .typing-effect::after {
+    content: "|";
+    animation: blink 0.7s infinite;
+    font-weight: normal;
+  }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
   </style>
   
