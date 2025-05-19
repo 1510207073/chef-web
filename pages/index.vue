@@ -1,11 +1,6 @@
 <template>
     <div class="app-container">
-      <!-- 添加页面预加载遮罩，在GSAP动画开始前隐藏内容 -->
-      <div class="page-loader">
-        <div class="loader-content">
-          <div class="loader-spinner"></div>
-        </div>
-      </div>
+      <!-- 已移除页面预加载遮罩 -->
       
       <header class="header">
         <div class="container">
@@ -248,70 +243,21 @@
     if (swiperInstance.value) swiperInstance.value.slideTo(index);
   };
 
-  // 页面加载后初始化GSAP动画
-  function initGSAPAnimations() {
-    // 确保GSAP已经加载
-    if (typeof gsap !== 'undefined') {
-      // 创建动画时间线
-      const tl = gsap.timeline({
-        defaults: { 
-          ease: "power2.out", 
-          duration: 1
-        },
-        onComplete: () => {
-          // GSAP动画完成后执行打字效果
-          console.log("GSAP动画完成，开始执行打字效果");
-          initTypeEffect();
-        }
-      });
-
-      // 元素初始状态已在CSS中设置，这里保持一致
-      // 这些设置与CSS预设相同，确保在不同浏览器中一致性
-      gsap.set('.gsap-title', { opacity: 0, y: -50, scale: 0.9 });
-      gsap.set('.gsap-desc', { opacity: 0, x: -30, visibility: 'hidden' });
-      gsap.set('.gsap-buttons', { opacity: 0, y: 30 });
-
-      // 添加动画序列
-      tl.to('.gsap-title', { 
-        opacity: 1, 
-        y: 0, 
-        scale: 1,
-        duration: 1.2
-      })
-      .to('.gsap-desc', { 
-        opacity: 1, 
-        x: 0,
-        visibility: 'visible',
-        duration: 1
-      }, "-=0.7") // 描述在标题动画70%时开始
-      .to('.gsap-buttons', { 
-        opacity: 1, 
-        y: 0,
-        duration: 0.8
-      }, "-=0.5") // 按钮在描述动画50%时开始
-      .call(() => {
-        // 动画完成后隐藏加载遮罩
-        const pageLoaderElement = document.querySelector('.page-loader');
-        if (pageLoaderElement) {
-          gsap.to(pageLoaderElement, {
-            opacity: 0,
-            duration: 0.3,
-            onComplete: () => {
-              if (pageLoaderElement) {
-                pageLoaderElement.style.display = 'none';
-              }
-            }
-          });
-        }
-      });
+  // 直接初始化打字效果，无需GSAP动画
+  function initContent() {
+    // 直接执行打字效果
+    console.log("直接开始执行打字效果");
+    initTypeEffect();
+    
+    // 隐藏加载遮罩(如果存在)
+    const pageLoaderElement = document.querySelector('.page-loader');
+    if (pageLoaderElement) {
+      pageLoaderElement.style.display = 'none';
     }
   }
 
   onMounted(() => {
-    // 先显示加载遮罩
-    if (document.querySelector('.page-loader')) {
-      document.querySelector('.page-loader').style.display = 'flex';
-    }
+    // 已移除加载遮罩相关代码
     
     console.log('Runtime config (public):', JSON.stringify(config.public, null, 2));
     document.querySelector('.scroll-to')?.addEventListener('click', (e) => {
@@ -432,11 +378,8 @@
         document.body.classList.add('fonts-loaded');
       });
     
-    // 动态加载GSAP库
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js';
-    script.onload = initGSAPAnimations;
-    document.head.appendChild(script);
+    // 直接初始化内容，无需GSAP
+    initContent();
   });
   
   // 在组件卸载时清除定时器
@@ -1879,24 +1822,14 @@
     }
   }
   
-  /* 调整动画相关样式 */
+  /* 移除动画相关样式，直接显示内容 */
   .gsap-title, .gsap-desc, .gsap-buttons {
-    will-change: transform, opacity;
-    opacity: 0; /* 预先设置为不可见，避免闪烁 */
-  }
-  
-  /* 添加初始状态样式，防止加载时闪烁 */
-  .gsap-title {
-    transform: translateY(-50px) scale(0.9);
+    opacity: 1;
+    transform: none;
   }
   
   .gsap-desc {
-    transform: translateX(-30px);
-    visibility: hidden;
-  }
-  
-  .gsap-buttons {
-    transform: translateY(30px);
+    visibility: visible;
   }
   
   .hero-content {
@@ -2315,39 +2248,6 @@
     50% { opacity: 0; }
   }
   
-  /* 页面加载遮罩 */
-  .page-loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    z-index: 10000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 1;
-    transition: opacity 0.3s;
-  }
-  
-  .loader-content {
-    text-align: center;
-  }
-  
-  .loader-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(234, 62, 64, 0.2);
-    border-radius: 50%;
-    border-top-color: var(--secondary-color);
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+  /* 已移除页面加载遮罩相关样式 */
   </style>
   
