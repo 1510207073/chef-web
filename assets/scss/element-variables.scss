@@ -1,0 +1,29 @@
+// Element Plus 主题变量覆盖
+
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #EA3E40,
+    ),
+    'success': (
+      'base': #2ecc71,
+    ),
+    'warning': (
+      'base': #f39c12,
+    ),
+    'danger': (
+      'base': #e74c3c,
+    ),
+    'error': (
+      'base': #e74c3c,
+    ),
+    'info': (
+      'base': #909399,
+    ),
+  ),
+  $button-padding-horizontal: (
+    'default': 20px,
+  )
+);
+
+// 如果你想覆盖更多元素样式，可以在这里添加 

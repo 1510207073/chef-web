@@ -1,0 +1,85 @@
+/* Element Plus CSS变量覆盖 */
+:root {
+  --el-color-primary: #EA3E40 !important;
+  --el-color-primary-light-3: #f15455 !important;
+  --el-color-primary-light-5: #f7898a !important;
+  --el-color-primary-light-7: #fbbcbc !important;
+  --el-color-primary-light-9: #feecec !important;
+  --el-color-primary-dark-2: #c83334 !important;
+  
+  /* 菜单样式覆盖 */
+  --el-menu-hover-bg-color: rgba(234, 62, 64, 0.1) !important;
+  --el-menu-active-color: #EA3E40 !important;
+  --el-menu-text-color: #333333 !important;
+  
+  /* 按钮样式覆盖 */
+  --el-button-hover-bg-color: #ff6b6c !important;
+  --el-button-active-bg-color: #d03536 !important;
+  
+  /* 调整边框圆角 */
+  --el-border-radius-base: 4px !important;
+  --el-border-radius-small: 2px !important;
+}
+
+/* 菜单样式调整 */
+.el-menu-item.is-active {
+  color: #EA3E40 !important;
+  background-color: rgba(234, 62, 64, 0.1) !important;
+}
+
+.el-menu-item:hover {
+  background-color: rgba(234, 62, 64, 0.05) !important;
+}
+
+/* 按钮样式调整 */
+.el-button--primary {
+  background-color: #EA3E40 !important;
+  border-color: #EA3E40 !important;
+}
+
+.el-button--primary:hover, 
+.el-button--primary:focus {
+  background-color: #ff6b6c !important;
+  border-color: #ff6b6c !important;
+}
+
+.el-button--primary:active {
+  background-color: #d03536 !important;
+  border-color: #d03536 !important;
+}
+
+/* 消息框样式 */
+.el-message-box__headerbtn:focus .el-message-box__close, 
+.el-message-box__headerbtn:hover .el-message-box__close {
+  color: #EA3E40 !important;
+}
+
+/* 表单样式 */
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: #EA3E40 !important;
+  border-color: #EA3E40 !important;
+}
+
+.el-radio__input.is-checked .el-radio__inner {
+  background-color: #EA3E40 !important;
+  border-color: #EA3E40 !important;
+}
+
+.el-switch.is-checked .el-switch__core {
+  border-color: #EA3E40 !important;
+  background-color: #EA3E40 !important;
+}
+
+/* 导航菜单样式 */
+.el-tabs__active-bar {
+  background-color: #EA3E40 !important;
+}
+
+.el-tabs__item.is-active {
+  color: #EA3E40 !important;
+}
+
+.el-tabs__item:hover {
+  color: #EA3E40 !important;
+} 

@@ -5,6 +5,8 @@
 </template>
 
 <script setup>
+// 导入Element Plus主题变量
+import '~/assets/scss/element-variables.scss'
 // App.vue is now just a layout shell
 // No script logic needed here for the main page content
 </script>

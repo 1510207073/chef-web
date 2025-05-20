@@ -873,46 +873,6 @@ a {
   margin-top: 5px;
 }
 
-/* 导航链接样式 */
-.navigation ul {
-  display: flex;
-  list-style: none;
-}
-
-.navigation li {
-  margin-left: 30px;
-}
-
-.navigation a {
-  color: var(--dark-text);
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s;
-  padding: 5px 0;
-  position: relative;
-}
-
-.navigation a::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: var(--secondary-color);
-  transition: width 0.3s;
-}
-
-.navigation a:hover::after,
-.navigation a.active::after {
-  width: 100%;
-}
-
-.navigation a:hover,
-.navigation a.active {
-  color: var(--secondary-color);
-}
-
 .doc-link {
   color: var(--light-text) !important;
   font-weight: 500 !important;

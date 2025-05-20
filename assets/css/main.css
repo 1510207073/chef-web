@@ -1,3 +1,8 @@
+/* 
+* 主样式文件
+* Element Plus 主题通过 element-variables.scss 和 element-plus-override.css 定义
+*/
+
 /* 全局CSS变量 */
 :root {
   --primary-color: #ffffff;     /* 白色 */

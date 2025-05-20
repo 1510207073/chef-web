@@ -40,13 +40,31 @@ export default defineNuxtConfig({
   },
   
   css: [
-    '~/assets/css/main.css'
+    '~/assets/css/main.css',
+    '~/assets/css/element-plus-override.css'
   ],
   
   modules: [
     '@nuxt/ui',
     '@element-plus/nuxt'
   ],
+
+  // Element Plus配置
+  elementPlus: {
+    importStyle: 'scss',
+  },
+
+  // VITE配置
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // 不使用additionalData避免循环引用
+          // 直接在scss文件中导入所需模块
+        }
+      }
+    }
+  },
 
   // Add explicit empty config for Nuxt Content
   // content: {
