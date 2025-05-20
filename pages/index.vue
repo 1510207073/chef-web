@@ -21,22 +21,16 @@
           class="el-menu-demo"
           mode="horizontal"
           @select="handleSelect"
+          :ellipsis="false"
         >
-          <el-menu-item index="1">Processing Center</el-menu-item>
-          <el-sub-menu index="2">
-            <template #title>Workspace</template>
-            <el-menu-item index="2-1">item one</el-menu-item>
-            <el-menu-item index="2-2">item two</el-menu-item>
-            <el-menu-item index="2-3">item three</el-menu-item>
-            <el-sub-menu index="2-4">
-              <template #title>item four</template>
-              <el-menu-item index="2-4-1">item one</el-menu-item>
-              <el-menu-item index="2-4-2">item two</el-menu-item>
-              <el-menu-item index="2-4-3">item three</el-menu-item>
-            </el-sub-menu>
+          <el-menu-item index="1">首页</el-menu-item>
+          <el-menu-item index="2">产品介绍</el-menu-item>
+          <el-sub-menu index="3">
+            <template #title>联系我们</template>
+            <el-menu-item index="3-1">加入内测</el-menu-item>
+            <el-menu-item index="3-2">加入我们</el-menu-item>
+            <el-menu-item index="3-3">商务合作</el-menu-item>
           </el-sub-menu>
-          <el-menu-item index="3" disabled>Info</el-menu-item>
-          <el-menu-item index="4">Orders</el-menu-item>
         </el-menu>
       </div>
     </header>

@@ -28,7 +28,7 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { hid: 'description', name: 'description', content: '一键大厨是一个让你轻松学做美食的应用，通过隔空手势操作，边学边做，轻松成为大厨。' },
+        { key: 'description', name: 'description', content: '一键大厨是一个让你轻松学做美食的应用，通过隔空手势操作，边学边做，轻松成为大厨。' },
         { name: 'theme-color', content: '#ffffff' },
       ],
       link: [
