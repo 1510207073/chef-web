@@ -44,7 +44,8 @@ export default defineNuxtConfig({
   ],
   
   modules: [
-    '@nuxt/ui'
+    '@nuxt/ui',
+    '@element-plus/nuxt'
   ],
 
   // Add explicit empty config for Nuxt Content
