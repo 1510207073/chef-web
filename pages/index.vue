@@ -17,6 +17,9 @@
           <nav class="navigation">
             <ul>
               <!-- 隐藏导航链接 -->
+              <li><a href="/">首页</a></li>
+              <li><a href="/products">产品介绍</a></li>
+              <li><a href="/contact">联系我们</a></li>
             </ul>
           </nav>
         </div>
@@ -79,13 +82,14 @@
         <div class="container">
           <div class="footer-content">
             <div class="footer-links">
-              <span class="copyright">Copyright © 2025 BitRhythm</span>
+              <span class="copyright">Copyright © 2025 北京位元律动科技有限公司</span>
+              <!-- 备案号 -->
+              <span class="footer-separator">|</span>
+              <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="footer-link">京ICP备2023028257号-1</a>
               <span class="footer-separator">|</span>
               <a href="/terms" target="_blank" rel="noopener noreferrer" class="footer-link">使用条款</a>
               <span class="footer-separator">|</span>
               <a href="/privacy" target="_blank" rel="noopener noreferrer" class="footer-link">隐私政策</a>
-              <span class="footer-separator">|</span>
-              <a href="mailto:developer@wyld.cc" class="footer-link">联系我们: developer@wyld.cc</a>
             </div>
           </div>
         </div>
