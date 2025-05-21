@@ -16,22 +16,10 @@
             </div>
           </a>
         </div>
-        <el-menu
-          :default-active="activeIndex"
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect"
-          :ellipsis="false"
-        >
-          <el-menu-item index="1">首页</el-menu-item>
-          <el-menu-item index="2">产品介绍</el-menu-item>
-          <el-sub-menu index="3">
-            <template #title>联系我们</template>
-            <el-menu-item index="3-1">加入内测</el-menu-item>
-            <el-menu-item index="3-2">加入我们</el-menu-item>
-            <el-menu-item index="3-3">商务合作</el-menu-item>
-          </el-sub-menu>
-        </el-menu>
+        <nav class="custom-navigation">
+          <a href="#" @click.prevent="handleNavSelect(0)" :class="{ 'active-nav-item': activeIndex === 0 }">首页</a>
+          <a href="#" @click.prevent="handleNavSelect(1)" :class="{ 'active-nav-item': activeIndex === 1 }">简介</a>
+        </nav>
       </div>
     </header>
 
@@ -89,6 +77,16 @@
           </div>
         </section>
       </SwiperSlide>
+      <SwiperSlide>
+        <section id="introduction" class="section introduction-section" data-section="introduction">
+          <div class="container">
+            <!-- "简介"页面的内容将放在这里 -->
+            <h2 class="section-title">简介</h2>
+            <p class="section-subtitle">欢迎来到一键大厨！这是一个创新的烹饪学习平台。</p>
+            <!-- 更多内容可以后续添加 -->
+          </div>
+        </section>
+      </SwiperSlide>
     </Swiper>
 
     <footer class="footer">
@@ -123,6 +121,8 @@
               class="footer-link"
               >隐私政策</a
             >
+            <span class="footer-separator">|</span>
+            <a href="mailto:developer@wyld.cc" class="footer-link">联系方式</a>
           </div>
         </div>
       </div>
@@ -140,75 +140,12 @@ import "swiper/css/pagination";
 
 const swiperInstance = ref(null);
 const activeIndex = ref(0);
-const sections = ["hero"];
+const sections = ["hero", "introduction"];
 const config = useRuntimeConfig();
 const appVersion = config.public.appVersion;
 const detectedArch = ref(null);
 const typeText = ref(null);
 const textToType = "隔空操作，边学边做，秒变大厨";
-const archDisplay = computed(() => {
-  return detectedArch.value === "arm64" ? "Apple Silicon" : "Intel";
-});
-const macDownloadUrl = computed(() => {
-  const version = appVersion;
-  const arch = detectedArch.value === "arm64" ? "arm64" : "x64";
-  const filename = `OneKeyChef_${version}_${arch}.zip`;
-  const baseUrl = `https://wyld-media.oss-cn-beijing.aliyuncs.com/onekeychef/update/v${version}/mac/${filename}`;
-  return baseUrl;
-});
-
-const windowsDownloadUrl = computed(() => {
-  const version = appVersion;
-  // Link to the .zip file as requested
-  const filename = `OneKeyChef_${version}.zip`;
-  // Construct the path similar to macOS, using the versioned subdirectory
-  const baseUrl = `https://wyld-media.oss-cn-beijing.aliyuncs.com/onekeychef/update/v${version}/win/${filename}`;
-  return baseUrl;
-});
-
-function detectArch() {
-  const userAgent = navigator.userAgent.toLowerCase();
-
-  if (userAgent.includes("mac") && navigator.userAgentData) {
-    try {
-      navigator.userAgentData
-        .getHighEntropyValues(["architecture", "platform", "platformVersion"])
-        .then((ua) => {
-          if (ua.architecture === "arm" || ua.architecture === "arm64") {
-            detectedArch.value = "arm64";
-          } else {
-            detectedArch.value = "x64";
-          }
-        })
-        .catch(() => {
-          fallbackArchDetection();
-        });
-    } catch (e) {
-      fallbackArchDetection();
-    }
-  } else {
-    fallbackArchDetection();
-  }
-}
-function fallbackArchDetection() {
-  const userAgent = navigator.userAgent.toLowerCase();
-
-  if (
-    (userAgent.includes("mac") && navigator.hardwareConcurrency > 8) ||
-    (userAgent.includes("macintosh") &&
-      /(apple.*silicon|m1|m2)/i.test(userAgent))
-  ) {
-    detectedArch.value = "arm64";
-  } else if (userAgent.includes("mac") || userAgent.includes("macintosh")) {
-    detectedArch.value = "x64";
-  } else {
-    detectedArch.value = "universal";
-  }
-}
-function trackDownload(platform, arch) {
-  console.log(`用户下载 ${platform} 版本，架构: ${arch}`);
-}
-
 // 打字效果实现
 let typeTimer = null;
 
@@ -283,6 +220,11 @@ const navigateToSlide = (index) => {
   if (swiperInstance.value) swiperInstance.value.slideTo(index);
 };
 
+// 新的导航处理函数
+const handleNavSelect = (index) => {
+  navigateToSlide(index);
+};
+
 // 直接初始化打字效果，无需GSAP动画
 function initContent() {
   // 直接执行打字效果
@@ -307,8 +249,6 @@ onMounted(() => {
     e.preventDefault();
     navigateToSlide(2);
   });
-  detectArch();
-
   // 打字效果将在GSAP动画完成后初始化
   // 不再直接在这里调用initTypeEffect
 
@@ -673,7 +613,7 @@ a {
 .header {
   background-color: rgba(255, 255, 255, 0.9);
   color: var(--dark-text);
-  padding: 20px 0;
+  padding: 0px 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
@@ -686,10 +626,42 @@ a {
 }
 
 .header .container {
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 15px;
+}
+
+/* 自定义导航栏样式 */
+.custom-navigation {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.custom-navigation a {
+  font-family: var(--main-font);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--dark-text);
+  padding: 0 25px; /* 调整菜单项间距 */
+  text-decoration: none;
+  transition: color 0.3s ease, border-bottom-color 0.3s ease;
+  border-bottom: 2px solid transparent; /* 默认无下划线 */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  line-height: normal; /* 确保与header高度一致时的垂直居中 */
+}
+
+.custom-navigation a:hover {
+  color: var(--secondary-color);
+  border-bottom-color: var(--secondary-color); /* 悬停时显示下划线 */
+}
+
+.custom-navigation a.active-nav-item {
+  color: var(--secondary-color);
+  border-bottom-color: var(--secondary-color); /* 激活时显示下划线 */
 }
 
 /* 提示条样式 */
@@ -1027,6 +999,7 @@ a {
 
 .store-btn:hover span {
   color: var(--secondary-color);
+  visibility: visible;
 }
 
 .store-btn span {
@@ -1899,16 +1872,11 @@ a {
   }
 }
 
-/* 移除动画相关样式，直接显示内容 */
+/* 调整动画相关样式 */
 .gsap-title,
 .gsap-desc,
 .gsap-buttons {
-  opacity: 1;
-  transform: none;
-}
-
-.gsap-desc {
-  visibility: visible;
+  will-change: transform, opacity;
 }
 
 .hero-content {
@@ -2173,131 +2141,6 @@ a {
   overflow: hidden;
 }
 
-/* 大型背景图和动画效果 */
-.animated-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 0;
-}
-
-/* 基础渐变背景 */
-.bg-gradient {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #f8f8f8 30%,
-    #f5f5f5 50%,
-    #f0f0f0 70%,
-    #f9f9f9 100%
-  );
-  animation: gradientShift 15s ease infinite;
-}
-
-/* 点状图案背景 */
-.bg-pattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(
-      rgba(234, 62, 64, 0.08) 1px,
-      transparent 1px
-    ),
-    radial-gradient(rgba(234, 62, 64, 0.05) 2px, transparent 2px);
-  background-size: 30px 30px, 50px 50px;
-  background-position: 0 0, 15px 15px;
-  opacity: 0.5;
-  animation: patternFloat 60s linear infinite;
-}
-
-/* 添加厨具图标背景元素 */
-.bg-kitchen-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 1;
-  opacity: 0.08;
-}
-
-.kitchen-element {
-  position: absolute;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.4;
-  filter: grayscale(20%) opacity(70%);
-}
-
-.element1 {
-  width: 500px;
-  height: 500px;
-  background-image: url("/images/bg01.svg");
-  top: 10%;
-  left: 5%;
-  transform: rotate(-15deg) scale(2);
-  opacity: 0.06;
-  animation: floatElement 30s infinite ease-in-out;
-}
-
-.element2 {
-  width: 600px;
-  height: 600px;
-  background-image: url("/images/bg03.svg");
-  bottom: 5%;
-  right: 5%;
-  transform: rotate(15deg) scale(2.2);
-  opacity: 0.05;
-  animation: floatElement 30s infinite ease-in-out 5s;
-}
-
-/* 轻微光效背景 */
-.hero-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at 50% 0%,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.3) 20%,
-    rgba(255, 255, 255, 0) 60%
-  );
-  z-index: 2;
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-/* 细微网格线 */
-.hero-section::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
-  background-size: 50px 50px;
-  z-index: 1;
-  opacity: 0.3;
-  pointer-events: none;
-}
-
 /* 背景动画 */
 @keyframes gradientShift {
   0%,
@@ -2328,16 +2171,6 @@ a {
   50% {
     transform: translateY(-30px) scale(1.05);
     opacity: 0.45;
-  }
-}
-
-@keyframes floatElement {
-  0%,
-  100% {
-    transform: rotate(-15deg) scale(2) translateY(0);
-  }
-  50% {
-    transform: rotate(-12deg) scale(2.05) translateY(-10px);
   }
 }
 
