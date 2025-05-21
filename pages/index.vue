@@ -18,7 +18,7 @@
         </div>
         <nav class="custom-navigation">
           <a href="#" @click.prevent="handleNavSelect(0)" :class="{ 'active-nav-item': activeIndex === 0 }">首页</a>
-          <a href="#" @click.prevent="handleNavSelect(1)" :class="{ 'active-nav-item': activeIndex === 1 }">简介</a>
+          <a href="#" @click.prevent="handleNavSelect(1)" :class="{ 'active-nav-item': activeIndex === 1 }">产品介绍</a>
         </nav>
       </div>
     </header>
@@ -79,11 +79,24 @@
       </SwiperSlide>
       <SwiperSlide>
         <section id="introduction" class="section introduction-section" data-section="introduction">
+          <div class="animated-background">
+            <div class="bg-gradient"></div>
+            <div class="bg-pattern"></div>
+            <div class="bg-shape shape1"></div>
+            <div class="bg-shape shape2"></div>
+            <div class="bg-shape shape3"></div>
+            <div class="kitchen-icon icon1"></div>
+            <div class="kitchen-icon icon2"></div>
+          </div>
           <div class="container">
-            <!-- "简介"页面的内容将放在这里 -->
-            <h2 class="section-title">简介</h2>
-            <p class="section-subtitle">欢迎来到一键大厨！这是一个创新的烹饪学习平台。</p>
-            <!-- 更多内容可以后续添加 -->
+            <h2 class="introduction-title">产品介绍</h2>
+            <p class="introduction-description">点击下面的视频观看产品简介</p>
+            <div class="video-player-container">
+              <video controls class="video-player">
+                <!-- <source src="YOUR_VIDEO_LINK_HERE" type="video/mp4"> -->
+                您的浏览器不支持 HTML5 视频。
+              </video>
+            </div>
           </div>
         </section>
       </SwiperSlide>
@@ -122,7 +135,7 @@
               >隐私政策</a
             >
             <span class="footer-separator">|</span>
-            <a href="mailto:developer@wyld.cc" class="footer-link">联系方式</a>
+            <a href="mailto:developer@wyld.cc" class="footer-link">联系我们</a>
           </div>
         </div>
       </div>
@@ -945,21 +958,18 @@ a {
 
 .app-store-btn:hover,
 .android-btn:hover {
-  transform: translateY(-5px);
   filter: none;
 }
 
 /* 添加active状态的样式，移除阴影 */
 .app-store-btn:active,
 .android-btn:active {
-  transform: translateY(-2px);
   filter: none;
 }
 
 /* 添加store-btn的active状态样式 */
 .store-btn:active {
   box-shadow: none;
-  transform: translateY(-1px) scale(1.01);
   background-color: rgba(255, 255, 255, 1);
 }
 
@@ -979,10 +989,10 @@ a {
 }
 
 .store-btn:hover {
-  transform: translateY(-3px) scale(1.03);
   box-shadow: none;
   background-color: rgba(255, 255, 255, 0.95);
   border-color: var(--secondary-color);
+  color: var(--secondary-color);
 }
 
 .store-btn img {
@@ -995,11 +1005,6 @@ a {
 .store-btn:hover img {
   filter: invert(23%) sepia(90%) saturate(7000%) hue-rotate(355deg)
     brightness(95%) contrast(85%);
-}
-
-.store-btn:hover span {
-  color: var(--secondary-color);
-  visibility: visible;
 }
 
 .store-btn span {
@@ -2204,4 +2209,56 @@ a {
 }
 
 /* 已移除页面加载遮罩相关样式 */
+
+/* 简介页面基础样式 */
+.introduction-section {
+  background: radial-gradient(circle at center, #f8f8f8 0%, #ffffff 70%); /* 与其他部分相似的背景 */
+  color: var(--dark-text);
+  text-align: center; /* 文本居中 */
+  display: flex; /* 使用 flex 布局进行垂直居中 */
+  flex-direction: column;
+  justify-content: center; /* 主要内容垂直居中 */
+  align-items: center;
+  padding-top: 0; /* 调整内边距，让内容更靠上一些 */
+}
+
+.introduction-section .container {
+  max-width: 800px; /* 限制内容宽度 */
+  width: 100%;
+  position: relative; /* 确保 z-index 生效 */
+  z-index: 2; /* 提高内容层级，使其在背景之上 */
+}
+
+.introduction-title {
+  font-family: var(--title-font);
+  font-size: 36px; /* 调整标题大小 */
+  color: var(--secondary-color); /* 将标题颜色改为红色 */
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* 为红色标题添加黑色文字阴影 */
+}
+
+.introduction-description {
+  font-family: var(--main-font);
+  font-size: 18px;
+  color: var(--dark-text); /* 将描述文字颜色改为黑色 */
+  margin-bottom: 40px;
+  /* text-shadow: 1px 1px 2px rgba(0,0,0,0.7); */ /* 移除文字阴影 */
+}
+
+.video-player-container {
+  width: 100%;
+  max-width: 720px; /* 视频播放器最大宽度 */
+  margin: 0 auto; /* 水平居中 */
+  background-color: #000; /* 播放器背景色 */
+  border-radius: 12px; /* 圆角 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden; /* 确保圆角生效 */
+}
+
+.video-player {
+  width: 100%;
+  height: auto; /* 高度自适应 */
+  display: block; /* 移除底部多余空间 */
+}
 </style>
