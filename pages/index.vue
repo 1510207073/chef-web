@@ -93,7 +93,7 @@
             <p class="introduction-description">点击下面的视频观看产品简介</p>
             <div class="video-player-container">
               <video controls class="video-player">
-                <!-- <source src="YOUR_VIDEO_LINK_HERE" type="video/mp4"> -->
+                <source src="https://media.wyld.cc/onetap-chef/media/%E4%BB%8B%E7%BB%8D.mp4" type="video/mp4">
                 您的浏览器不支持 HTML5 视频。
               </video>
             </div>
