@@ -90,12 +90,19 @@
           </div>
           <div class="container">
             <h2 class="introduction-title">产品介绍</h2>
-            <p class="introduction-description">点击下面的视频观看产品简介</p>
-            <div class="video-player-container">
-              <video controls class="video-player">
-                <source src="https://media.wyld.cc/onetap-chef/media/%E4%BB%8B%E7%BB%8D.mp4" type="video/mp4">
-                您的浏览器不支持 HTML5 视频。
-              </video>
+            <p class="introduction-description">浏览下面的产品截图了解更多功能</p>
+            <div class="image-gallery-container">
+              <div class="image-gallery-grid">
+                <div class="image-item">
+                  <img src="/images/p1.PNG" alt="产品截图1" class="gallery-image" />
+                </div>
+                <div class="image-item">
+                  <img src="/images/p2.PNG" alt="产品截图2" class="gallery-image" />
+                </div>
+                <div class="image-item">
+                  <img src="/images/p3.PNG" alt="产品截图3" class="gallery-image" />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -2246,19 +2253,52 @@ a {
   /* text-shadow: 1px 1px 2px rgba(0,0,0,0.7); */ /* 移除文字阴影 */
 }
 
-.video-player-container {
-  width: 100%;
-  max-width: 720px; /* 视频播放器最大宽度 */
-  margin: 0 auto; /* 水平居中 */
-  background-color: #000; /* 播放器背景色 */
-  border-radius: 12px; /* 圆角 */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  overflow: hidden; /* 确保圆角生效 */
+/* 定义宽高变量 */
+:root {
+  --image-width: 205px;
+  --image-height: 484px;
 }
 
-.video-player {
+/* 图片横向排列样式 */
+.image-gallery-container {
   width: 100%;
-  height: auto; /* 高度自适应 */
-  display: block; /* 移除底部多余空间 */
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
+
+.image-gallery-grid {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.image-item {
+  flex: 1;
+  width: var(--image-width);
+  min-height: var(--image-height);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+  padding: 0;
+}
+
+.image-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-image {
+  width: 100%;
+  height: var(--image-height);
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+
 </style>
