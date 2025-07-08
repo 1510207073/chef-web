@@ -102,13 +102,13 @@
             <div class="image-gallery-container">
               <div class="image-gallery-grid">
                 <div class="image-item">
-                  <img src="/images/p1.PNG" alt="产品截图1" class="gallery-image" />
+                  <img src="/images/p01.PNG" alt="产品截图1" class="gallery-image" />
                 </div>
                 <div class="image-item">
-                  <img src="/images/p2.PNG" alt="产品截图2" class="gallery-image" />
+                  <img src="/images/p02.PNG" alt="产品截图2" class="gallery-image" />
                 </div>
                 <div class="image-item">
-                  <img src="/images/p3.PNG" alt="产品截图3" class="gallery-image" />
+                  <img src="/images/p03.PNG" alt="产品截图3" class="gallery-image" />
                 </div>
               </div>
             </div>
