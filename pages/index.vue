@@ -131,7 +131,7 @@
               target="_blank"
               rel="noopener noreferrer"
               class="footer-link"
-              >使用条款</a
+              >用户协议</a
             >
             <span class="footer-separator">|</span>
             <a
