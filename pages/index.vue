@@ -60,13 +60,21 @@
                 ref="typeText"
               ></p>
               <div class="cta-buttons gsap-buttons">
-                <a href="#" class="app-store-btn">
+                <a
+                  href="https://apps.apple.com/app/6738836704"
+                  target="_blank"
+                  class="app-store-btn"
+                >
                   <div class="store-btn">
                     <img src="/images/appstore.svg" alt="App Store" />
                     <span>iOS 下载</span>
                   </div>
                 </a>
-                <a href="#" class="android-btn">
+                <a
+                  href="#"
+                  @click.prevent="isAndroidModalOpen = true"
+                  class="android-btn"
+                >
                   <div class="store-btn">
                     <img src="/images/android.svg" alt="Android" />
                     <span>Android 下载</span>
@@ -147,11 +155,40 @@
         </div>
       </div>
     </footer>
+
+    <UModal v-model="isAndroidModalOpen">
+      <UCard
+        :ui="{
+          ring: '',
+          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        }"
+      >
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h3
+              class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+            >
+              提示
+            </h3>
+            <UButton
+              color="gray"
+              variant="ghost"
+              icon="i-heroicons-x-mark-20-solid"
+              class="-my-1"
+              @click="isAndroidModalOpen = false"
+            />
+          </div>
+        </template>
+
+        <p>Android 版本正在开发中，敬请期待！</p>
+      </UCard>
+    </UModal>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from "vue";
+
 import { useRuntimeConfig } from "#app";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Autoplay, Pagination, Mousewheel } from "swiper/modules";
@@ -165,6 +202,7 @@ const config = useRuntimeConfig();
 const appVersion = config.public.appVersion;
 const detectedArch = ref(null);
 const typeText = ref(null);
+const isAndroidModalOpen = ref(false);
 const textToType = "隔空操作，边学边做，秒变大厨";
 // 打字效果实现
 let typeTimer = null;
