@@ -61,7 +61,7 @@
               ></p>
               <div class="cta-buttons gsap-buttons">
                 <a
-                  href="https://apps.apple.com/app/6738836704"
+                  href="https://apps.apple.com/app/6748383363"
                   target="_blank"
                   class="app-store-btn"
                 >
