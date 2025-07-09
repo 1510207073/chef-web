@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "522YSXNYB5.cc.wyld.chef",
+                "paths": ["/app/*"]
+            }
+        ]
+    }
+}
