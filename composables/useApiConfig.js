@@ -6,9 +6,14 @@
 export const useApiConfig = () => {
   const config = useRuntimeConfig()
 
+  // 环境检测
+  const isDev = process.dev || process.env.NODE_ENV === 'development'
+  
   // API 基础配置
   const apiConfig = {
-    baseURL: config.public.apiBaseUrl || 'https://app-gateway.wyld.cc/api/v1',
+    baseURL: isDev 
+      ? 'http://localhost:3000/api/v1'  // 开发环境使用代理
+      : (config.public.apiBaseUrl || 'https://app-gateway.wyld.cc/api/v1'), // 生产环境使用实际地址
     host: config.public.apiHost || 'app-gateway.wyld.cc',
   }
 

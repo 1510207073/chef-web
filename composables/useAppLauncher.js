@@ -71,8 +71,8 @@ export const useAppLauncher = () => {
   // 主要的启动函数
   const launchApp = async (path = '', options = {}) => {
     const device = detectDevice()
-    const universalLink = `${config.universalLinkBase}${path}`
-    const customSchemeUrl = `${config.customScheme}://${path.replace(/^\//, '')}`
+    const universalLink = `${linkConfig.universalLinkBase}${path}`
+    const customSchemeUrl = `${linkConfig.customScheme}://${path.replace(/^\//, '')}`
 
     console.log('设备信息:', device)
     console.log('启动路径:', path)
@@ -82,7 +82,7 @@ export const useAppLauncher = () => {
       if (device.isSafari && !device.isInApp) {
         // iOS Safari: 优先使用 Universal Links
         console.log('iOS Safari: 使用 Universal Links')
-        return await handleUniversalLink(universalLink, config.appStore.ios)
+        return await handleUniversalLink(universalLink, storeConfig.ios.storeUrl)
       } else if (device.isWeChat || device.isQQ) {
         // 微信/QQ 内置浏览器: 引导用户在 Safari 中打开
         showOpenInSafariTip()
@@ -90,7 +90,7 @@ export const useAppLauncher = () => {
       } else {
         // iOS 其他浏览器: 使用 Custom Scheme
         console.log('iOS 其他浏览器: 使用 Custom Scheme')
-        return await handleCustomScheme(customSchemeUrl, config.appStore.ios)
+        return await handleCustomScheme(customSchemeUrl, storeConfig.ios.storeUrl)
       }
     }
     
@@ -103,14 +103,14 @@ export const useAppLauncher = () => {
       } else {
         // Android: 使用 Custom Scheme
         console.log('Android: 使用 Custom Scheme')
-        return await handleCustomScheme(customSchemeUrl, config.appStore.android)
+        return await handleCustomScheme(customSchemeUrl, storeConfig.android.storeUrl)
       }
     }
     
     // 其他平台
     else {
       console.log('其他平台: 使用 Custom Scheme')
-      return await handleCustomScheme(customSchemeUrl, config.appStore.ios)
+      return await handleCustomScheme(customSchemeUrl, storeConfig.ios.storeUrl)
     }
   }
 
@@ -182,6 +182,7 @@ export const useAppLauncher = () => {
     launchApp,
     detectDevice,
     generateSmartBannerMeta,
-    config
+    linkConfig,
+    storeConfig
   }
 }

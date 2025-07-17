@@ -1,18 +1,16 @@
 export const useRecipe = () => {
   const { buildApiUrl, getDefaultHeaders, getDefaultQuery } = useApiConfig()
-  const { getAccessToken } = useAuth()
+  const { accessToken } = useAuth()
 
   // 获取菜谱详情
   const getRecipeDetail = async (recipeId) => {
     try {
-      const accessToken = await getAccessToken()
-      
       const response = await $fetch(buildApiUrl(`/onechef/recipe/${recipeId}`), {
         method: 'GET',
         query: getDefaultQuery(),
         headers: {
           ...getDefaultHeaders(),
-          'authorization': `Bearer ${accessToken}`
+          ...(accessToken.value && { 'authorization': `Bearer ${accessToken.value}` })
         }
       })
 

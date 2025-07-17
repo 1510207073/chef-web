@@ -66,6 +66,17 @@ export default defineNuxtConfig({
     }
   },
 
+  // 开发环境代理配置，解决 CORS 问题
+  nitro: {
+    devProxy: {
+      '/api/': {
+        target: 'https://app-gateway.wyld.cc/api/',
+        changeOrigin: true,
+        prependPath: true,
+      }
+    }
+  },
+
   // Add explicit empty config for Nuxt Content
   // content: {
   //   // https://content.nuxt.com/docs/getting-started/configuration
