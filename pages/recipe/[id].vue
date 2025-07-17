@@ -176,6 +176,11 @@ useHead(() => ({
       name: 'description',
       content: recipe.value?.description || '查看美味菜谱的详细制作方法'
     },
+    // iOS Smart Banner - Apple 官方推荐的 App 推广方式
+    {
+      name: 'apple-itunes-app',
+      content: `app-id=6738049391, app-argument=https://chef.wyld.cc/app/recipe/${recipeId.value}`
+    },
     // 微信分享优化
     {
       property: 'og:title',
@@ -188,22 +193,48 @@ useHead(() => ({
     {
       property: 'og:image',
       content: recipe.value?.cover?.file_url || ''
+    },
+    // Universal Links 支持
+    {
+      property: 'al:ios:url',
+      content: `onechef://recipe/${recipeId.value}`
+    },
+    {
+      property: 'al:ios:app_store_id',
+      content: '6738049391'
+    },
+    {
+      property: 'al:ios:app_name',
+      content: '一键大厨'
     }
   ]
 }))
 
 // 打开APP
-const openInApp = () => {
-  const appScheme = `onechef://recipe/${recipeId.value}`
-  const fallbackUrl = 'https://apps.apple.com/app/id6738049391' // 替换为实际的App Store链接
-  
-  // 尝试打开APP
-  window.location.href = appScheme
-  
-  // 如果APP未安装，延迟跳转到下载页面
-  setTimeout(() => {
-    window.location.href = fallbackUrl
-  }, 2000)
+const { launchApp } = useAppLauncher()
+
+const openInApp = async () => {
+  try {
+    const result = await launchApp(`/recipe/${recipeId.value}`)
+    console.log('App 启动结果:', result)
+    
+    if (!result.success) {
+      switch (result.reason) {
+        case 'wechat_browser':
+          // 微信浏览器中的处理已在 launchApp 中完成
+          break
+        case 'user_cancelled':
+          console.log('用户取消了下载')
+          break
+        case 'error':
+          console.error('启动失败:', result.error)
+          // 可以显示错误提示
+          break
+      }
+    }
+  } catch (error) {
+    console.error('App 启动异常:', error)
+  }
 }
 
 // 图片加载错误处理

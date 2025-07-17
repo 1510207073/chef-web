@@ -4,8 +4,15 @@
         "details": [
             {
                 "appID": "522YSXNYB5.cc.wyld.chef",
-                "paths": ["/app/*"]
+                "paths": [
+                    "/app/*",
+                    "/recipe/*",
+                    "/app/recipe/*"
+                ]
             }
         ]
+    },
+    "webcredentials": {
+        "apps": ["522YSXNYB5.cc.wyld.chef"]
     }
 }
