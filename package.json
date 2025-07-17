@@ -7,7 +7,12 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "env:dev": "./switch-env.sh development",
+    "env:prod": "./switch-env.sh production",
+    "env:test": "./switch-env.sh test",
+    "dev:prod": "npm run env:prod && nuxt dev",
+    "build:prod": "npm run env:prod && nuxt build"
   },
   "dependencies": {
     "@nuxt/ui": "^2.19.1",

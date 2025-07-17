@@ -4,15 +4,7 @@
  */
 
 export const useAppLauncher = () => {
-  // 配置信息
-  const config = {
-    universalLinkBase: 'https://chef.wyld.cc/app',
-    customScheme: 'onechef',
-    appStore: {
-      ios: 'https://apps.apple.com/app/id6748383363',
-      android: 'https://play.google.com/store/apps/details?id=cc.wyld.chef' // 需要替换为实际的包名
-    }
-  }
+  const { linkConfig, storeConfig } = useApiConfig()
 
   // 设备检测
   const detectDevice = () => {

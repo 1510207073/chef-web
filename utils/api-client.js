@@ -6,16 +6,11 @@ class ApiClient {
       'user-agent': 'Dart/3.8 (dart:io)',
       'content-type': 'application/json',
       'accept-encoding': 'gzip',
-      'host': 'tool-internal.wyld.cc'
+      'host': 'app-gateway.wyld.cc'
     }
     this.defaultQuery = {
       app_id: 'onechef',
-      app_version: '1.1.0',
-      source: 'app',
-      os: 'ios',
-      os_version: '18.5',
-      device: 'iPhone',
-      device_version: '18.5'
+      source: 'web',
     }
   }
 
@@ -64,7 +59,7 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient('https://tool-internal.wyld.cc/api/v1')
+export const apiClient = new ApiClient('https://app-gateway.wyld.cc/api/v1')
 
 // 使用示例
 export const useRecipeAPI = () => {

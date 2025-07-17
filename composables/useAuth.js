@@ -4,26 +4,15 @@ const globalRefreshToken = ref(null)
 const globalUser = ref(null)
 
 export const useAuth = () => {
+  const { buildApiUrl, getDefaultHeaders, getDefaultQuery } = useApiConfig()
+
   // 获取游客token
   const getGuestToken = async () => {
     try {
-      const response = await $fetch('https://tool-internal.wyld.cc/api/v1/auth/token/guest', {
+      const response = await $fetch(buildApiUrl('/auth/token/guest'), {
         method: 'POST',
-        query: {
-          app_id: 'onechef',
-          app_version: '1.1.0',
-          source: 'app',
-          os: 'ios',
-          os_version: '18.5',
-          device: 'iPhone',
-          device_version: '18.5'
-        },
-        headers: {
-          'user-agent': 'Dart/3.8 (dart:io)',
-          'content-type': 'application/json',
-          'accept-encoding': 'gzip',
-          'host': 'tool-internal.wyld.cc'
-        },
+        query: getDefaultQuery(),
+        headers: getDefaultHeaders(),
         body: {
           ident: null
         }
