@@ -8,8 +8,17 @@
 <script setup>
 // 导入Element Plus主题变量
 import '~/assets/scss/element-variables.scss'
-// App.vue is now just a layout shell
-// No script logic needed here for the main page content
+
+// 在应用启动时初始化认证
+onMounted(async () => {
+  try {
+    const { initAuth } = useAuth()
+    await initAuth()
+    console.log('游客token初始化完成')
+  } catch (error) {
+    console.error('初始化认证失败:', error)
+  }
+})
 </script>
 
 <style>

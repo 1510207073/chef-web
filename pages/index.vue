@@ -81,6 +81,15 @@
                   </div>
                 </a>
               </div>
+              
+              <!-- 开发测试链接 -->
+              <div class="dev-links" v-if="isDev">
+                <h4 style="color: #666; margin: 20px 0 10px 0; font-size: 14px;">开发测试:</h4>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                  <NuxtLink to="/test" class="dev-link">API测试页面</NuxtLink>
+                  <NuxtLink to="/recipe/67" class="dev-link">菜谱详情示例</NuxtLink>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -204,6 +213,11 @@ const detectedArch = ref(null);
 const typeText = ref(null);
 const isAndroidModalOpen = ref(false);
 const textToType = "隔空操作，边学边做，秒变大厨";
+
+// 开发环境检测
+const isDev = computed(() => {
+  return process.dev || window.location.hostname === 'localhost'
+})
 // 打字效果实现
 let typeTimer = null;
 
@@ -2336,6 +2350,28 @@ a {
   object-fit: cover;
   display: block;
   flex-shrink: 0;
+}
+
+/* 开发测试链接样式 */
+.dev-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  text-decoration: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 107, 108, 0.3);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.dev-link:hover {
+  background: rgba(255, 107, 108, 0.1);
+  border-color: rgba(255, 107, 108, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 108, 0.2);
 }
 
 
