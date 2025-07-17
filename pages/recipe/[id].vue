@@ -26,12 +26,27 @@
         />
         <div class="cover-overlay">
           <h1 class="recipe-title">{{ recipe.name }}</h1>
-          <div class="recipe-meta">
-            <span class="category">{{ recipe.category?.name }}</span>
+          <!-- <div class="recipe-meta">
             <div class="likes"> 
-              <iconify-icon icon="iconify:mdi-heart" class="heart-icon"></iconify-icon>
+              <span class="heart-icon">♥</span>
               <span>{{ recipe.like_info?.count || 0 }}</span>
             </div>
+          </div> -->
+        </div>
+      </div>
+
+      <!-- 作者信息 -->
+      <div class="author-section">
+        <div class="author-info">
+          <img 
+            :src="recipe.user?.avatar_url" 
+            :alt="recipe.user?.nickname"
+            class="author-avatar"
+            @error="handleAvatarError"
+          />
+          <div class="author-details">
+            <h4 class="author-name">{{ recipe.user?.nickname }}</h4>
+            <p class="author-intro">{{ recipe.user?.intro }}</p>
           </div>
         </div>
       </div>
@@ -86,35 +101,6 @@
               <span class="ingredient-dot"></span>
               <span class="ingredient-name">{{ seasoning }}</span>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 标签 -->
-      <div v-if="recipe.tags?.length" class="tags-section">
-        <div class="tags-container">
-          <span 
-            v-for="tag in recipe.tags" 
-            :key="tag.tag_id"
-            class="tag"
-          >
-            {{ tag.tag_name }}
-          </span>
-        </div>
-      </div>
-
-      <!-- 作者信息 -->
-      <div class="author-section">
-        <div class="author-info">
-          <img 
-            :src="recipe.user?.avatar_url" 
-            :alt="recipe.user?.nickname"
-            class="author-avatar"
-            @error="handleAvatarError"
-          />
-          <div class="author-details">
-            <h4 class="author-name">{{ recipe.user?.nickname }}</h4>
-            <p class="author-intro">{{ recipe.user?.intro }}</p>
           </div>
         </div>
       </div>
@@ -353,17 +339,67 @@ const handleAvatarError = (event) => {
   z-index: 1;
 }
 
+/* 作者信息 */
+.author-section {
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  /* margin: 16px 0; */
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f0f0f0;
+}
+
+.author-details {
+  flex: 1;
+}
+
+.author-name {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.author-intro {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
 /* 描述部分 */
 .description-section {
-  padding: 24px 20px;
-  border-bottom: 1px solid #f0f0f0;
+  /* padding: 20px; */
+  background: white;
+  border-radius: 12px;
+  /* margin: 16px 0; */
 }
 
 .description {
+  margin: 0;
   font-size: 16px;
   line-height: 1.6;
-  color: #666;
-  margin: 0;
+  color: #333;
+}
+
+/* 点赞图标样式修复 */
+.heart-icon {
+  color: #ff6b6b;
+  font-size: 18px;
+  margin-right: 4px;
+  display: inline-block;
 }
 
 /* 材料部分 */
@@ -456,42 +492,6 @@ const handleAvatarError = (event) => {
   font-size: 12px;
 }
 
-/* 作者信息 */
-.author-section {
-  padding: 20px;
-  background: #f8f9fa;
-  margin: 0 20px 20px;
-  border-radius: 15px;
-}
-
-.author-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.author-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.author-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin: 0 0 4px 0;
-}
-
-.author-intro {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
-}
-
 /* 底部按钮 */
 .bottom-action {
   position: fixed;
@@ -565,7 +565,7 @@ const handleAvatarError = (event) => {
   
   .description-section,
   .ingredients-section {
-    padding: 20px 16px;
+    padding: 10px 16px;
   }
   
   .bottom-action {
