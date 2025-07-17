@@ -9,7 +9,7 @@ export const useAppLauncher = () => {
     universalLinkBase: 'https://chef.wyld.cc/app',
     customScheme: 'onechef',
     appStore: {
-      ios: 'https://apps.apple.com/app/id6738049391',
+      ios: 'https://apps.apple.com/app/id6748383363',
       android: 'https://play.google.com/store/apps/details?id=cc.wyld.chef' // 需要替换为实际的包名
     }
   }
@@ -181,7 +181,7 @@ export const useAppLauncher = () => {
     return [
       {
         name: 'apple-itunes-app',
-        content: 'app-id=6738049391, app-argument=https://chef.wyld.cc/app'
+        content: 'app-id=6748383363, app-argument=https://chef.wyld.cc/app'
       }
     ]
   }

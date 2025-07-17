@@ -179,7 +179,7 @@ useHead(() => ({
     // iOS Smart Banner - Apple 官方推荐的 App 推广方式
     {
       name: 'apple-itunes-app',
-      content: `app-id=6738049391, app-argument=https://chef.wyld.cc/app/recipe/${recipeId.value}`
+      content: `app-id=6748383363, app-argument=https://chef.wyld.cc/app/recipe/${recipeId.value}`
     },
     // 微信分享优化
     {
@@ -201,7 +201,7 @@ useHead(() => ({
     },
     {
       property: 'al:ios:app_store_id',
-      content: '6738049391'
+      content: '6748383363'
     },
     {
       property: 'al:ios:app_name',
